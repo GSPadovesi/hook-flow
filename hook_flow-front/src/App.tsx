@@ -1,19 +1,8 @@
-import { Dashboard } from './pages'
-import { Header } from './components/header/header'
-import { SidebarInset, SidebarProvider } from './components/ui/sidebar'
-import { TooltipProvider } from './components/ui/tooltip'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './routes'
 
 function App() {
-  return (
-    <TooltipProvider>
-      <SidebarProvider>
-        <Header />
-        <SidebarInset>
-          <Dashboard />
-        </SidebarInset>
-      </SidebarProvider>
-    </TooltipProvider>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App

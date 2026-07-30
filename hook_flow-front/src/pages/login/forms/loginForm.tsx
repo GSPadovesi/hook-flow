@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { Input, Title, Typography } from '../../../components'
 import { useAuth } from '@/hooks'
 import { Button } from '@/components'
+import { isEmailValid, isRequiredValid } from '@/utils'
 import * as S from '../page.styles'
 
 type LoginFormProps = {
@@ -11,12 +12,30 @@ type LoginFormProps = {
 export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
   const [formData, setFormData] = useState({ email: '', password: '' })
   const { onLoginSubmit, loading, error } = useAuth();
-  const isSubmitDisabled = useMemo(() => loading || !formData.email.trim() || !formData.password, [loading, formData]);
 
+  const isEmailInvalid = useMemo(() => {
+    if (!isRequiredValid(formData.email)) return false
+
+    return !isEmailValid(formData.email)
+  }, [formData.email])
+
+  const errorMessage = useMemo(() => {
+    if (isEmailInvalid) return 'Email incorreto'
+    if (error) return 'Email ou senha invalidos'
+
+    return null
+  }, [error, isEmailInvalid])
+
+  const isSubmitDisabled = useMemo(() =>
+    loading ||
+    !isRequiredValid(formData.email) ||
+    !isRequiredValid(formData.password) ||
+    isEmailInvalid,
+    [loading, formData, isEmailInvalid]
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-
     setFormData((current) => ({
       ...current,
       [name]: value,
@@ -24,11 +43,12 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
   }
 
   const handleSubmit = useCallback(async () => {
+    if (isEmailInvalid) return
     await onLoginSubmit({
       email: formData.email,
       password: formData.password
     })
-  }, [formData])
+  }, [formData, isEmailInvalid, onLoginSubmit])
 
   return (
     <S.Form>
@@ -53,7 +73,7 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
         onChange={handleChange}
       />
       <Button style={{ justifyContent: 'center' }} onClick={handleSubmit} disabled={isSubmitDisabled}>Fazer login</Button>
-      {error && <Typography color="#dc2626">Email ou senha invalidos</Typography>}
+      {errorMessage && <Typography color="#dc2626">{errorMessage}</Typography>}
       <div>
         <S.SwitchText>
           Ainda nao tem conta?

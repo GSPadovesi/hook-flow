@@ -1,36 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { HeaderHamburguer } from './headerHamburguer/HeaderHamburguer'
 import { Title } from '../title'
 import { Button } from '../button'
 import { House, LayoutGrid, Webhook, TicketPercent, TicketCheck, Lock, LogOut } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks'
 import * as S from './sidebar.styles'
+
+const dados = [
+  { label: "Dashboard", icon: <House />, href: "/dashboard" },
+  { label: "Aplicações", icon: <LayoutGrid />, href: "/applications" },
+  { label: "Webhooks", icon: <Webhook />, href: "/webhooks" },
+  { label: "Eventos", icon: <TicketPercent />, href: "/events" },
+  { label: "Entregas", icon: <TicketCheck />, href: "/sends" },
+  { label: "Administrador", icon: <Lock />, href: "/admin" }
+]
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
+  const { onLogout } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
+  const closeMenu = () => { setIsOpen(false) }
 
-  const closeMenu = () => {
-    setIsOpen(false)
-  }
+  const handleLogout = useCallback(async () => {
+    await onLogout();
+    navigate("/login")
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
-
-    return () => {
-      document.body.style.overflow = ''
-    }
+    return () => { document.body.style.overflow = '' }
   }, [isOpen])
-
-
-  const dados = [
-    { label: "Dashboard", icon: <House />, href: "/dashboard" },
-    { label: "Aplicações", icon: <LayoutGrid />, href: "/applications" },
-    { label: "Webhooks", icon: <Webhook />, href: "/webhooks" },
-    { label: "Eventos", icon: <TicketPercent />, href: "/events" },
-    { label: "Entregas", icon: <TicketCheck />, href: "/sends" },
-    { label: "Administrador", icon: <Lock />, href: "/admin" }
-  ]
 
   return (
     <>
@@ -55,7 +56,7 @@ export function Sidebar() {
             )
           })}
         </S.List>
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={handleLogout}>
           <LogOut />
           Sair
         </Button>

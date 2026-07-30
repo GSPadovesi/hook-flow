@@ -130,7 +130,6 @@ public class AuthController {
                 .headers(headers -> {
                     headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
                     headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
-
                 })
                 .build();
     }

@@ -14,8 +14,28 @@ export const router = createBrowserRouter([
         children: [
           {
             path: appRoutes.Dashboard,
-            element: <Dashboard />,
+            element: <Dashboard />
           },
+          {
+            path: appRoutes.Application,
+            element: <h1>Tela de aplicação</h1>
+          },
+          {
+            path: appRoutes.Webhook,
+            element: <h1>Tela de webhooks</h1>
+          },
+          {
+            path: appRoutes.Event,
+            element: <h1>Tela de eventos</h1>
+          },
+          {
+            path: appRoutes.Send,
+            element: <h1>Tela de enviados</h1>
+          },
+          {
+            path: appRoutes.Admin,
+            element: <h1>Tela de admin</h1>
+          }
         ],
       },
     ],

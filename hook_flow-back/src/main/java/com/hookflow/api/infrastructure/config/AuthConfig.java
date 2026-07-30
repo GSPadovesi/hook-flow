@@ -3,6 +3,7 @@ package com.hookflow.api.infrastructure.config;
 import com.hookflow.api.application.gateways.AuthGateway;
 import com.hookflow.api.application.gateways.UserGateway;
 import com.hookflow.api.application.usecases.auth.GenerateTokenUseCase;
+import com.hookflow.api.application.usecases.auth.GetUserUseCase;
 import com.hookflow.api.application.usecases.auth.LoginUseCase;
 import com.hookflow.api.application.usecases.auth.RegisterUseCase;
 import com.hookflow.api.infrastructure.security.AuthCookieFactory;
@@ -21,9 +22,15 @@ public class AuthConfig {
     }
 
     @Bean
+    GetUserUseCase getUserUseCase(UserGateway userGateway){
+        return new GetUserUseCase(userGateway);
+    }
+
+    @Bean
     LoginUseCase loginUseCase(UserGateway userGateway, AuthGateway authGateway){
         return new LoginUseCase(userGateway, authGateway);
     }
+
     @Bean
     RegisterUseCase registerUseCase(UserGateway userGateway, AuthGateway authGateway){
         return new RegisterUseCase(userGateway, authGateway);

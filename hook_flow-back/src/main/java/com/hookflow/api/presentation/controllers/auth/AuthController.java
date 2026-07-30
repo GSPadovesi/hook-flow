@@ -4,12 +4,15 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.hookflow.api.application.command.auth.LoginCommand;
 import com.hookflow.api.application.command.auth.RegisterCommand;
 import com.hookflow.api.application.usecases.auth.GenerateTokenUseCase;
+import com.hookflow.api.application.usecases.auth.GetUserUseCase;
 import com.hookflow.api.application.usecases.auth.LoginUseCase;
 import com.hookflow.api.application.usecases.auth.RegisterUseCase;
+import com.hookflow.api.domain.entities.User;
 import com.hookflow.api.infrastructure.security.AuthCookieFactory;
 import com.hookflow.api.infrastructure.security.ValidateToken;
 import com.hookflow.api.presentation.dtos.auth.LoginDTO;
 import com.hookflow.api.presentation.dtos.auth.RegisterDTO;
+import com.hookflow.api.presentation.dtos.auth.UserResponseDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -17,10 +20,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -31,13 +32,15 @@ public class AuthController {
     private final RegisterUseCase registerUseCase;
     private final LoginUseCase loginUseCase;
     private final GenerateTokenUseCase generateTokenUseCase;
+    private final GetUserUseCase getUserUseCase;
     private final AuthCookieFactory authCookieFactory;
     private final ValidateToken validateToken;
 
-    public AuthController(RegisterUseCase registerUseCase, LoginUseCase loginUseCase, GenerateTokenUseCase generateTokenUseCase, AuthCookieFactory authCookieFactory, ValidateToken validateToken){
+    public AuthController(RegisterUseCase registerUseCase, LoginUseCase loginUseCase, GenerateTokenUseCase generateTokenUseCase, GetUserUseCase getUserUseCase, AuthCookieFactory authCookieFactory, ValidateToken validateToken){
         this.registerUseCase = registerUseCase;
         this.loginUseCase = loginUseCase;
         this.generateTokenUseCase = generateTokenUseCase;
+        this.getUserUseCase = getUserUseCase;
         this.authCookieFactory = authCookieFactory;
         this.validateToken = validateToken;
     }
@@ -54,10 +57,11 @@ public class AuthController {
         ResponseCookie refreshToken = authCookieFactory.createRefreshTokenCookie(tokens.get("refresh_token"));
         ResponseCookie accessToken = authCookieFactory.createAccessTokenCookie(tokens.get("access_token"));
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, refreshToken.toString())
-                .header(HttpHeaders.SET_COOKIE, accessToken.toString())
+        return ResponseEntity.ok()
+                .headers(headers -> {
+                    headers.add(HttpHeaders.SET_COOKIE, refreshToken.toString());
+                    headers.add(HttpHeaders.SET_COOKIE, accessToken.toString());
+                })
                 .build();
     }
 
@@ -75,10 +79,11 @@ public class AuthController {
         ResponseCookie refreshToken = authCookieFactory.createRefreshTokenCookie(tokens.get("refresh_token"));
         ResponseCookie accessToken = authCookieFactory.createAccessTokenCookie(tokens.get("access_token"));
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, refreshToken.toString())
-                .header(HttpHeaders.SET_COOKIE, accessToken.toString())
+        return ResponseEntity.ok()
+                .headers(headers -> {
+                    headers.add(HttpHeaders.SET_COOKIE, refreshToken.toString());
+                    headers.add(HttpHeaders.SET_COOKIE, accessToken.toString());
+                })
                 .build();
     }
 
@@ -109,7 +114,9 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, newCookie.toString())
+                .headers(headers -> {
+                    headers.add(HttpHeaders.SET_COOKIE, newCookie.toString());
+                })
                 .build();
     }
 
@@ -120,8 +127,24 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .headers(headers -> {
+                    headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+                    headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
+
+                })
                 .build();
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserResponseDTO> getUser(Authentication authentication){
+        String email = authentication.getName();
+        User user = getUserUseCase.execute(email);
+        UserResponseDTO response = new UserResponseDTO(
+                user.getUsername(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

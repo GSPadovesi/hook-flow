@@ -6,7 +6,7 @@ const variants = {
     color: #fff;
     background: #9d2dfd;
 
-    &:hover {
+    &:not(:disabled):hover {
       color: #fff;
       background: #8b22e8;
     }
@@ -15,19 +15,20 @@ const variants = {
     color: #fff;
     background: #101122;
 
-    &:hover {
+    &:not(:disabled):hover {
       color: #fff;
       background: #1d1f3a;
     }
   `,
 }
 
-export const Button = styled.a<ButtonStyleProps>`
+const buttonStyles = css<ButtonStyleProps>`
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
   padding: 20px 40px;
+  border: 0;
   border-radius: 12px;
   color: #fff;
   font-size: 16px;
@@ -37,12 +38,32 @@ export const Button = styled.a<ButtonStyleProps>`
   text-decoration: none;
   text-transform: capitalize;
   transition: all 0.5s ease-in-out;
+  cursor: pointer;
 
-  &:hover {
+  &:not(:disabled):hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(7, 17, 45, 0.24);
     filter: brightness(1.08);
   }
 
   ${({ $variant }) => variants[$variant]}
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+`
+
+export const Button = styled.button<ButtonStyleProps>`
+  ${buttonStyles}
+`
+
+export const Anchor = styled.a<ButtonStyleProps>`
+  ${buttonStyles}
 `

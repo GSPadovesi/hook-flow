@@ -101,31 +101,12 @@ export const SwitchText = styled.p`
   color: #56566a;
 `
 
-export const Form = styled.form`
+export const Form = styled.div`
   padding: 56px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 18px;
-
-  h2 {
-    margin: 0 0 8px;
-    font-size: 32px;
-  }
-
-  button {
-    width: 100%;
-    border-radius: 12px;
-    padding: 14px 16px;
-  }
-
-  button {
-    border: 0;
-    background: #9d2dfd;
-    color: #ffffff;
-    cursor: pointer;
-    font-weight: 700;
-  }
 
   ${SwitchText} button {
     width: auto;
@@ -133,6 +114,10 @@ export const Form = styled.form`
     background: transparent;
     color: #9d2dfd;
     font-weight: 700;
+    border: none;
+    font-size: 16px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
   }
 
   @media (max-width: 768px) {

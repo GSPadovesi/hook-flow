@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Input } from '../../../components'
+import { Button, Input } from '../../../components'
 import * as S from '../page.styles'
 
 type RegisterFormProps = {
@@ -56,7 +56,15 @@ export const RegisterForm = ({ onLoginClick }: RegisterFormProps) => {
         value={formData.password}
         onChange={handleChange}
       />
-      <button type="submit">Cadastrar</button>
+      <Input
+        label="Confirme sua senha"
+        name="password"
+        type="password"
+        placeholder="Sua senha"
+        value={formData.password}
+        onChange={handleChange}
+      />
+      <Button style={{ justifyContent: 'center' }}>Cadastrar</Button>
       <S.SwitchText>
         Ja tem conta?
         <button type="button" onClick={onLoginClick}>Entrar</button>

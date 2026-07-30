@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Input, Title, Typography } from '../../../components'
+import { useAuth } from '@/hooks'
+import { Button } from '@/components'
 import * as S from '../page.styles'
 
 type LoginFormProps = {
@@ -7,10 +9,10 @@ type LoginFormProps = {
 }
 
 export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  })
+  const [formData, setFormData] = useState({ email: '', password: '' })
+  const { onLoginSubmit, loading, error } = useAuth();
+  const isSubmitDisabled = useMemo(() => loading || !formData.email.trim() || !formData.password, [loading, formData]);
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -21,13 +23,18 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
     }))
   }
 
-  console.log(formData)
+  const handleSubmit = useCallback(async () => {
+    await onLoginSubmit({
+      email: formData.email,
+      password: formData.password
+    })
+  }, [formData])
 
   return (
     <S.Form>
       <div>
         <Title type="h2" color="#000">Bem vindo de volta</Title>
-        <Typography>Faça o login para acessas a sua conta</Typography>
+        <Typography>Faça o login para acessar sua conta</Typography>
       </div>
       <Input
         label="Email"
@@ -45,11 +52,17 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
         value={formData.password}
         onChange={handleChange}
       />
-      <button type="submit">Acessar painel</button>
-      <S.SwitchText>
-        Ainda nao tem conta?
-        <button type="button" onClick={onRegisterClick}>Registrar</button>
-      </S.SwitchText>
+      <Button style={{ justifyContent: 'center' }} onClick={handleSubmit} disabled={isSubmitDisabled}>Fazer login</Button>
+      {error && <Typography color="#dc2626">Email ou senha invalidos</Typography>}
+      <div>
+        <S.SwitchText>
+          Ainda nao tem conta?
+          <button type="button" onClick={onRegisterClick}>Registrar</button>
+        </S.SwitchText>
+        <S.SwitchText>
+          <button type="button" onClick={onRegisterClick}>Esqueci minha senha</button>
+        </S.SwitchText>
+      </div>
     </S.Form>
   )
 }

@@ -4,7 +4,6 @@ export const Page = styled.section`
   width: 100%;
   min-height: 100dvh;
   padding: 24px;
-  background: #f6f2ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,14 +11,13 @@ export const Page = styled.section`
 
 export const Container = styled.div`
   width: 100%;
-  max-width: 1080px;
   min-height: 620px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
   border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 24px 70px rgba(16, 17, 34, 0.14);
+  border: 1px solid #101122;
+  box-shadow: 0 8px 30px rgba(16, 17, 34, 0.14);
 
   @media (max-width: 768px) {
     min-height: auto;

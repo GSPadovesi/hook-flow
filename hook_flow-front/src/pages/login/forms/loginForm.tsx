@@ -79,9 +79,9 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
           Ainda nao tem conta?
           <button type="button" onClick={onRegisterClick}>Registrar</button>
         </S.SwitchText>
-        <S.SwitchText>
+        {/* <S.SwitchText>
           <button type="button" onClick={onRegisterClick}>Esqueci minha senha</button>
-        </S.SwitchText>
+        </S.SwitchText> */}
       </div>
     </S.Form>
   )

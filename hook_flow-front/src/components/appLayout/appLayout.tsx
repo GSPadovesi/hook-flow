@@ -9,7 +9,9 @@ export function AppLayout() {
     <>
       <S.Main aria-label="Main">
         {location.pathname !== "/login" && <Sidebar />}
-        <Outlet />
+        <S.Content>
+          <Outlet />
+        </S.Content>
       </S.Main>
     </>
   )

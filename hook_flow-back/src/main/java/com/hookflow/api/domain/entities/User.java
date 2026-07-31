@@ -3,8 +3,10 @@ package com.hookflow.api.domain.entities;
 import com.hookflow.api.domain.enums.UserRole;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class User {
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+$");
     private UUID id;
     private String username;
     private String name;
@@ -24,7 +26,14 @@ public class User {
     }
 
     public static User create(String username, String name, String email, String password){
-        return new User(null, username, name, email, password, UserRole.CUSTOMER, true);
+        if(username == null || username.isBlank()) throw new IllegalArgumentException("Nome de usuário é obrigatorio");
+        if(username.length() < 3) throw new IllegalArgumentException("Nome invalido");
+        if(name == null || name.isBlank()) throw new IllegalArgumentException("Nome é obrigatorio");
+        if(email == null || email.isBlank()) throw new IllegalArgumentException("Email é obrigatorio");
+        if(!EMAIL_PATTERN.matcher(email.trim().toLowerCase()).matches()) throw new IllegalArgumentException("Email invalido");
+        if(password == null || password.isBlank()) throw new IllegalArgumentException("Senha é obrigatoria");
+
+        return new User(null, username.trim(), name.trim(), email.trim().toLowerCase(), password, UserRole.CUSTOMER, true);
     }
 
     public static User restore(UUID id, String username, String name, String email, String password, UserRole role, boolean active){

@@ -1,6 +1,7 @@
 package com.hookflow.api.application.usecases.auth;
 
 import com.hookflow.api.application.command.auth.RegisterCommand;
+import com.hookflow.api.application.exceptions.UserAlreadyExistsException;
 import com.hookflow.api.application.gateways.AuthGateway;
 import com.hookflow.api.application.gateways.UserGateway;
 import com.hookflow.api.domain.entities.User;
@@ -19,7 +20,7 @@ public class RegisterUseCase {
 
     public Map<String, String> execute(RegisterCommand command){
         if(userGateway.existsByEmail(command.email()) || userGateway.existsByUsername(command.username())){
-            throw new RuntimeException("E-mail ou Usuário ja cadastrado");
+            throw new UserAlreadyExistsException("E-mail ou Usuário ja cadastrado");
         }
 
         String newPassword = authGateway.hashPassword(command.password());

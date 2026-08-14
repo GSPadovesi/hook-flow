@@ -5,25 +5,31 @@ import { useCallback, useEffect, useState } from "react"
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
-  const [status, setStatus] = useState<SessionStatus>('loading')
+  const [status, setStatus] = useState<SessionStatus | String>('loading')
 
-  const refreshSession = useCallback(async () => {
-    setStatus('loading')
+  const createSession = useCallback(async () => {
+    if (status === "authenticated") return;
 
     try {
       const data = await validateSession();
-      setUser(data)
-      setStatus('authenticated')
+      setUser(data);
+      setStatus('authenticated');
     } catch (error) {
-      setUser(null)
-      setStatus('unauthenticated')
+      clearSession();
     }
+  }, []);
+
+  const clearSession = useCallback(() => {
+    setUser(null);
+    setStatus('unauthenticated')
   }, [])
 
-  useEffect(() => { refreshSession() }, [refreshSession])
+  useEffect(() => {
+    createSession()
+  }, [])
 
   return (
-    <UserContext.Provider value={{ user, status, refreshSession }}>
+    <UserContext.Provider value={{ user, status, createSession, clearSession }}>
       {children}
     </UserContext.Provider>
   )

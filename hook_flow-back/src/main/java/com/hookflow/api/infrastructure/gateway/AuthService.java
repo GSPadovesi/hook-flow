@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 public class AuthService implements AuthGateway {
     @Value("${jwt.secret.api}")
     private String secretKey;
-    @Value(("${spring.application.name}"))
+    @Value("${spring.application.name}")
     private String issuer;
     private final PasswordEncoder passwordEncoder;
 

@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { appRoutes } from './routePaths'
 import { Loading } from '@/components'
 import { UserContext } from '@/context'
+import { ClientApplicationProvider } from '@/providers'
 
 function useSessionStatus() {
   const auth = useContext(UserContext)
@@ -14,7 +15,9 @@ export function ProtectedRoute() {
   const status = useSessionStatus()
   if (status === 'loading') return <Loading />
   if (status === 'unauthenticated') return <Navigate to={appRoutes.Login} replace state={{ from: location }} />
-  return <Outlet />
+  return <ClientApplicationProvider>
+    <Outlet />
+  </ClientApplicationProvider>
 }
 
 export function GuestRoute() {

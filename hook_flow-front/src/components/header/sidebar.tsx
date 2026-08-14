@@ -26,7 +26,11 @@ export function Sidebar() {
   const handleLogout = useCallback(async () => {
     await onLogout();
     navigate("/login")
-  }, []);
+  }, [navigate]);
+
+  const handleNavigate = useCallback((href: string) => {
+    navigate(href);
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -48,7 +52,11 @@ export function Sidebar() {
 
             return (
               <S.Item key={`${item.href}-${index}`}>
-                <Button href={item.href} variant={isActive ? 'primary' : 'secondary'} style={{ width: '100%' }}>
+                <Button
+                  variant={isActive ? 'primary' : 'secondary'}
+                  style={{ width: '100%' }}
+                  onClick={() => handleNavigate(item.href)}
+                >
                   {item.icon}
                   {item.label}
                 </Button>

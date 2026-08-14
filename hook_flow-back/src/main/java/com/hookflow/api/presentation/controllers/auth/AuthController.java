@@ -7,12 +7,10 @@ import com.hookflow.api.application.usecases.auth.GenerateTokenUseCase;
 import com.hookflow.api.application.usecases.auth.GetUserUseCase;
 import com.hookflow.api.application.usecases.auth.LoginUseCase;
 import com.hookflow.api.application.usecases.auth.RegisterUseCase;
-import com.hookflow.api.domain.entities.User;
 import com.hookflow.api.infrastructure.security.AuthCookieFactory;
 import com.hookflow.api.infrastructure.security.ValidateToken;
 import com.hookflow.api.presentation.dtos.auth.LoginDTO;
 import com.hookflow.api.presentation.dtos.auth.RegisterDTO;
-import com.hookflow.api.presentation.dtos.auth.UserResponseDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -32,7 +29,6 @@ public class AuthController {
     private final RegisterUseCase registerUseCase;
     private final LoginUseCase loginUseCase;
     private final GenerateTokenUseCase generateTokenUseCase;
-    private final GetUserUseCase getUserUseCase;
     private final AuthCookieFactory authCookieFactory;
     private final ValidateToken validateToken;
 
@@ -40,13 +36,13 @@ public class AuthController {
         this.registerUseCase = registerUseCase;
         this.loginUseCase = loginUseCase;
         this.generateTokenUseCase = generateTokenUseCase;
-        this.getUserUseCase = getUserUseCase;
         this.authCookieFactory = authCookieFactory;
         this.validateToken = validateToken;
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginDTO requestDTO){
+        System.out.println("Entrei no login");
         LoginCommand command = new LoginCommand(
                 requestDTO.email(),
                 requestDTO.password()
@@ -124,26 +120,15 @@ public class AuthController {
     public ResponseEntity<Void> logout(){
         ResponseCookie refreshCookie = authCookieFactory.removeRefreshTokenCookie();
         ResponseCookie accessCookie = authCookieFactory.removeAccessTokenCookie();
+        ResponseCookie csrfCookie = authCookieFactory.removeCsrfTokenCookie();
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .headers(headers -> {
                     headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
                     headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
+                    headers.add(HttpHeaders.SET_COOKIE, csrfCookie.toString());
                 })
                 .build();
-    }
-
-    @GetMapping("/user")
-    public ResponseEntity<UserResponseDTO> getUser(Authentication authentication){
-        String email = authentication.getName();
-        User user = getUserUseCase.execute(email);
-        UserResponseDTO response = new UserResponseDTO(
-                user.getUsername(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole()
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

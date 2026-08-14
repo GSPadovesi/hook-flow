@@ -4,7 +4,7 @@ type OpenProps = {
   $isOpen: boolean
 }
 
-export const Sidebar = styled.header<OpenProps>`
+export const Sidebar = styled.div<OpenProps>`
   width: 350px;
   min-height: 100dvh;
   z-index: 100;

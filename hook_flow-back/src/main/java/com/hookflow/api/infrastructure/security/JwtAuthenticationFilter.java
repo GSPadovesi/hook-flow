@@ -2,7 +2,7 @@ package com.hookflow.api.infrastructure.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.hookflow.api.application.gateways.UserGateway;
-import com.hookflow.api.infrastructure.persistence.auth.AuthenticatedUser;
+import com.hookflow.api.infrastructure.persistence.security.AuthenticatedUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -29,10 +29,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("Entrei no filtro JWT");
         try {
+            System.out.println("Entrei no try");
             String token = getTokenAccessToken(request);
 
             if(token == null){
+                System.out.println("Entrei no if sem token");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -40,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             DecodedJWT tokenValid = validateToken.execute(token);
 
             if (!"access".equals(tokenValid.getClaim("type").asString())) {
+                System.out.println("Entrei no if sem token e access token");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -49,6 +53,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             .findUserByEmail(tokenValid.getSubject())
                             .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"))
             );
+
+            System.out.println("Passou o if sem access token, segue o user: " + authenticatedUser.getUser().getName());
+
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     authenticatedUser,
@@ -66,6 +73,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getServletPath()
+                .equals("/hookflow-api/events");
     }
 
     private String getTokenAccessToken(HttpServletRequest request){

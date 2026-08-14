@@ -5,10 +5,12 @@ import com.hookflow.api.domain.entities.ClientApplication;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationEntity;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationMapper;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationRepository;
-import com.hookflow.api.infrastructure.persistence.user.UserEntity;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +35,21 @@ public class ClientApplicationService implements ClientApplicationGateway {
     @Override
     public Optional<ClientApplication> findClientApplicationById(UUID id) {
         return clientApplicationRepository.findById(id).map(clientApplicationMapper::toDomain);
+    }
+
+    @Override
+    public Optional<List<ClientApplication>> findAllClientApplication(Integer page, UUID ownerId) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<ClientApplication> applications =
+                clientApplicationRepository
+                        .findAllByOwnerId(ownerId, pageable)
+                        .stream()
+                        .map(clientApplicationMapper::toDomain)
+                        .toList();
+
+        if(applications.isEmpty()) return Optional.empty();
+
+        return Optional.of(applications);
     }
 
     @Transactional(readOnly = true)

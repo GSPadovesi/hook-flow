@@ -112,7 +112,17 @@ export const RegisterForm = ({ onLoginClick }: RegisterFormProps) => {
         value={formData.passwordConfirm}
         onChange={handleChange}
       />
-      <Button style={{ justifyContent: 'center' }} onClick={handleSubmit} disabled={isSubmitDisabled}>Cadastrar</Button>
+      <Button
+        style={{ justifyContent: 'center' }}
+        onClick={handleSubmit}
+        disabled={isSubmitDisabled}
+        aria-busy={loading}
+      >
+        <S.SubmitContent>
+          {loading && <S.ButtonSpinner aria-hidden="true" />}
+          {loading ? 'Cadastrando...' : 'Cadastrar'}
+        </S.SubmitContent>
+      </Button>
       {errorMessage && <Typography color="#dc2626">{errorMessage}</Typography>}
 
       <S.SwitchText>

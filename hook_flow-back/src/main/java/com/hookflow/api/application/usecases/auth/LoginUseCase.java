@@ -1,6 +1,7 @@
 package com.hookflow.api.application.usecases.auth;
 
 import com.hookflow.api.application.command.auth.LoginCommand;
+import com.hookflow.api.application.exceptions.InvalidCredentialsException;
 import com.hookflow.api.application.exceptions.UserNotFoundException;
 import com.hookflow.api.application.gateways.AuthGateway;
 import com.hookflow.api.application.gateways.UserGateway;
@@ -25,7 +26,7 @@ public class LoginUseCase {
         boolean validatePassword = authGateway.passwordMatchers(command.password(), user.getPassword());
 
         if (!validatePassword) {
-            throw new RuntimeException("Senha invalida");
+            throw new InvalidCredentialsException("Senha invalida");
         }
 
         String refreshToken = authGateway.generateRefreshToken(user);

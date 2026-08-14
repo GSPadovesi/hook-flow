@@ -12,7 +12,12 @@ public class CreateClientApplicationUseCase {
     }
 
     public ClientApplication execute(RegisterClientApplicationCommand command){
+        ClientApplication newClient = ClientApplication.create(
+                command.ownerId(),
+                command.name(),
+                command.description()
+        );
 
-
+        return clientApplicationGateway.save(newClient);
     }
 }

@@ -1,4 +1,4 @@
-package com.hookflow.api.infrastructure.persistence.auth;
+package com.hookflow.api.infrastructure.persistence.security;
 
 import com.hookflow.api.domain.entities.User;
 import org.springframework.security.core.GrantedAuthority;

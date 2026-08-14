@@ -1,15 +1,14 @@
-import styled from 'styled-components'
+import { useEffect, useState } from 'react'
+import * as S from './page.styles'
 
 export const Page = () => {
   return (
-    <DashboardPage>
-      <h1>Dashboard</h1>
-    </DashboardPage>
+    <S.Page>
+      <S.teste ><h1>Ola</h1></S.teste>
+      <S.teste ><h1>Ola</h1></S.teste>
+      <S.teste ><h1>Ola</h1></S.teste>
+      <S.teste2 ><h1>Ola</h1></S.teste2>
+      <S.teste3 ><h1>Ola</h1></S.teste3>
+    </S.Page>
   )
 }
-
-const DashboardPage = styled.main`
-  min-height: 100dvh;
-  padding: 2rem;
-`
-

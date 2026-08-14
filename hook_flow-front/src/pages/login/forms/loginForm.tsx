@@ -72,7 +72,17 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
         value={formData.password}
         onChange={handleChange}
       />
-      <Button style={{ justifyContent: 'center' }} onClick={handleSubmit} disabled={isSubmitDisabled}>Fazer login</Button>
+      <Button
+        style={{ justifyContent: 'center' }}
+        onClick={handleSubmit}
+        disabled={isSubmitDisabled}
+        aria-busy={loading}
+      >
+        <S.SubmitContent>
+          {loading && <S.ButtonSpinner aria-hidden="true" />}
+          {loading ? 'Entrando...' : 'Fazer login'}
+        </S.SubmitContent>
+      </Button>
       {errorMessage && <Typography color="#dc2626">{errorMessage}</Typography>}
       <div>
         <S.SwitchText>

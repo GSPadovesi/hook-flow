@@ -1,12 +1,19 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
-export const Page = styled.section`
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`
+
+export const Page = styled.div`
   width: 100%;
-  min-height: 100dvh;
+  height: 100%;
   padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: center;
 `
 
 export const Container = styled.div`
@@ -121,4 +128,22 @@ export const Form = styled.div`
   @media (max-width: 768px) {
     padding: 32px 24px;
   }
+`
+
+export const SubmitContent = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 112px;
+`
+
+export const ButtonSpinner = styled.span`
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.42);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: ${spin} 0.8s linear infinite;
+  flex-shrink: 0;
 `

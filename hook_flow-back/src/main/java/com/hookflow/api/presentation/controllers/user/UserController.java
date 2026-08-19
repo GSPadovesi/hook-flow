@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @GetMapping("/user")
-    public ResponseEntity<UserResponseDTO> getUser(@AuthenticationPrincipal AuthenticatedUser authentication, CsrfToken csrfToken) {
+    public ResponseEntity<UserResponseDTO> getUser(@AuthenticationPrincipal AuthenticatedUser authentication) {
         UserResponseDTO response = new UserResponseDTO(
                 authentication.getUser().getId(),
                 authentication.getUser().getUsername(),

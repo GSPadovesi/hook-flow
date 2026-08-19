@@ -1,13 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { AppLayout } from '../components'
-import { Dashboard, Applications, Login } from '../pages'
+import { Applications, Dashboard, Login, Placeholder } from '../pages'
 import { GuestRoute, ProtectedRoute } from './routeGuards'
 import { appRoutes } from './routePaths'
 export { appRoutes } from './routePaths'
-
-export const Teste = () => {
-  return <h1>Ola, mundo</h1>
-}
 
 export const router = createBrowserRouter([
   {
@@ -26,19 +22,19 @@ export const router = createBrowserRouter([
           },
           {
             path: appRoutes.Webhook,
-            element: <Teste />
+            element: <Placeholder />
           },
           {
             path: appRoutes.Event,
-            element: <Teste />
+            element: <Placeholder />
           },
           {
             path: appRoutes.Send,
-            element: <Teste />
+            element: <Placeholder />
           },
           {
             path: appRoutes.Admin,
-            element: <Teste />
+            element: <Placeholder />
           }
         ],
       },

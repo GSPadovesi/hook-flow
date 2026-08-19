@@ -17,7 +17,7 @@ const dados = [
 ]
 
 export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { onLogout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,11 +26,11 @@ export function Sidebar() {
   const handleLogout = useCallback(async () => {
     await onLogout();
     navigate("/login")
-  }, [navigate]);
+  }, [navigate, onLogout]);
 
   const handleNavigate = useCallback((href: string) => {
     navigate(href);
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''

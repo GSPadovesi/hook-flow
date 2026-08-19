@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  z-index: 20;
+  z-index: 200;
   padding: 24px;
   background: rgba(16, 17, 34, 0.56);
   display: flex;
@@ -12,10 +12,11 @@ export const Overlay = styled.div`
 `
 
 export const Content = styled.div`
-  width: min(100%, 560px);
+  width: 880px;
   max-height: calc(100vh - 48px);
   border-radius: 8px;
   background: #fff;
   box-shadow: 0 18px 48px rgba(16, 17, 34, 0.24);
   overflow: auto;
+  padding: 16px 20px;
 `

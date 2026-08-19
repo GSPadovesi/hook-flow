@@ -1,10 +1,5 @@
-import type { ButtonHTMLAttributes, Dispatch, SetStateAction } from 'react'
+import type { HeaderHamburguerProps } from '@/types'
 import * as S from './headerHamburguer.styles'
-
-type HeaderHamburguerProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-}
 
 export const HeaderHamburguer = ({ isOpen, setIsOpen, ...props }: HeaderHamburguerProps) => {
   return (

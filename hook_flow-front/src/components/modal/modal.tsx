@@ -1,17 +1,8 @@
-import type { ReactNode } from 'react'
+import type { ModalProps } from '@/types'
 import * as S from './modal.styles'
 
-type ModalProps = {
-  isOpen: boolean
-  children: ReactNode
-  ariaLabel: string
-  onClose?: () => void
-}
-
 export const Modal = ({ isOpen, children, ariaLabel, onClose }: ModalProps) => {
-  if (!isOpen) {
-    return null
-  }
+  if (!isOpen) return null
 
   return (
     <S.Overlay onClick={onClose}>

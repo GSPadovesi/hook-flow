@@ -9,3 +9,11 @@ export type registerProps = {
   email: string,
   password: string
 }
+
+export type LoginFormProps = {
+  onRegisterClick: () => void
+}
+
+export type RegisterFormProps = {
+  onLoginClick: () => void
+}

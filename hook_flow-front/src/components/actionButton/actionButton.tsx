@@ -1,13 +1,7 @@
-import type { ClientApplicationProps } from '@/types'
+import type { ActionButtonProps, ClientApplicationProps } from '@/types'
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import * as S from './actionButton.styles'
-
-type ActionButtonProps = {
-  application: ClientApplicationProps
-  onEdit?: (application: ClientApplicationProps) => void
-  onDelete?: (application: ClientApplicationProps) => void
-}
 
 export const ActionButton = ({ application, onEdit, onDelete }: ActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false)

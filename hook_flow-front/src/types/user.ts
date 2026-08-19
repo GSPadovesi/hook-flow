@@ -15,7 +15,7 @@ export type User = {
 
 export type UserContextProps = {
   user: User | null;
-  status: SessionStatus | String;
-  createSession: () => void;
+  status: SessionStatus;
+  createSession: () => Promise<void>;
   clearSession: () => void;
 }

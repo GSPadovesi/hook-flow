@@ -1,13 +1,11 @@
+import type { ChangeEvent } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { Input, Title, Typography } from '../../../components'
 import { useAuth } from '@/hooks'
 import { Button } from '@/components'
+import type { LoginFormProps } from '@/types'
 import { isEmailValid, isRequiredValid } from '@/utils'
 import * as S from '../page.styles'
-
-type LoginFormProps = {
-  onRegisterClick: () => void
-}
 
 export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
   const [formData, setFormData] = useState({ email: '', password: '' })
@@ -34,7 +32,7 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
     [loading, formData, isEmailInvalid]
   );
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
     setFormData((current) => ({
       ...current,

@@ -1,5 +1,6 @@
 package com.hookflow.api.infrastructure.persistence.apiKey;
 
+import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
 import com.hookflow.api.domain.entities.ApiKey;
 
 public class ApiKeyMapper {

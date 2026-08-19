@@ -14,6 +14,15 @@ export type ClientApplicationProps = {
   keys: KeysProps[]
 }
 
+export type ClientApplicationApiResponse = {
+  id: string
+  name: string
+  description: string
+  active: boolean
+  ownerId: string
+  keys: KeysProps[]
+}
+
 export type ClientApplicationContextProps = {
   applications: ClientApplicationProps[];
   header: string[]

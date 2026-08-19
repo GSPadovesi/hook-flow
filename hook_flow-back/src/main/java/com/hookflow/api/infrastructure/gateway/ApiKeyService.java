@@ -1,5 +1,6 @@
 package com.hookflow.api.infrastructure.gateway;
 
+import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
 import com.hookflow.api.application.gateways.ApiKeyGateway;
 import com.hookflow.api.domain.entities.ApiKey;
 import com.hookflow.api.infrastructure.persistence.apiKey.ApiKeyEntity;

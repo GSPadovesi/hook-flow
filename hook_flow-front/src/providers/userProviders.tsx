@@ -5,7 +5,12 @@ import { useCallback, useEffect, useState } from "react"
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
-  const [status, setStatus] = useState<SessionStatus | String>('loading')
+  const [status, setStatus] = useState<SessionStatus>('loading')
+
+  const clearSession = useCallback(() => {
+    setUser(null);
+    setStatus('unauthenticated')
+  }, [])
 
   const createSession = useCallback(async () => {
     if (status === "authenticated") return;
@@ -14,18 +19,29 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       const data = await validateSession();
       setUser(data);
       setStatus('authenticated');
-    } catch (error) {
+    } catch {
       clearSession();
     }
-  }, []);
-
-  const clearSession = useCallback(() => {
-    setUser(null);
-    setStatus('unauthenticated')
-  }, [])
+  }, [clearSession, status]);
 
   useEffect(() => {
-    createSession()
+    let isMounted = true;
+
+    validateSession()
+      .then((data) => {
+        if (!isMounted) return;
+        setUser(data);
+        setStatus('authenticated');
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setUser(null);
+        setStatus('unauthenticated');
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [])
 
   return (

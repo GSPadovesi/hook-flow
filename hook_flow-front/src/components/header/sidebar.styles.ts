@@ -13,7 +13,6 @@ export const Sidebar = styled.div<OpenProps>`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  /* overflow: hidden; */
   padding: 32px 16px;
   border-right: 3px solid #9d2dfd;
 

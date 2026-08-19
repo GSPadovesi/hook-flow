@@ -18,7 +18,7 @@ export const useAuth = () => {
 
     try {
       await login(email, password);
-      // await csrf();
+      await csrf();
       await auth?.createSession();
       navigate(appRoutes.Dashboard);
     } catch (error) {
@@ -47,7 +47,7 @@ export const useAuth = () => {
         setLoading(false);
       }
     },
-    [auth, navigate]
+    [navigate]
   );
 
   const onLogout = useCallback(async () => {

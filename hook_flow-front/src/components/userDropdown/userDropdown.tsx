@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { ChevronDown, ChevronUp, LogOut, Settings, User } from 'lucide-react'
+import { useCallback, useContext, useRef, useState } from 'react'
+import { ChevronDown, ChevronUp, LogOut, User } from 'lucide-react'
 import { UserContext } from '@/context'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks'
@@ -17,7 +17,7 @@ export const UserDropdown = () => {
   const handleLogout = useCallback(async () => {
     await onLogout();
     navigate("/login")
-  }, [navigate])
+  }, [navigate, onLogout])
 
   return (
     <S.Wrapper ref={wrapperRef}>
@@ -38,7 +38,7 @@ export const UserDropdown = () => {
           Perfil
         </S.MenuItem>
         <S.Separator />
-        <S.MenuItem type="button" role="menuitem" $danger onClick={() => handleLogout}>
+        <S.MenuItem type="button" role="menuitem" $danger onClick={handleLogout}>
           <LogOut size={18} />
           Sair
         </S.MenuItem>

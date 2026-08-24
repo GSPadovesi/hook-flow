@@ -1,6 +1,5 @@
-package com.hookflow.api.infrastructure.gateway;
+package com.hookflow.api.infrastructure.services;
 
-import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
 import com.hookflow.api.application.gateways.ApiKeyGateway;
 import com.hookflow.api.domain.entities.ApiKey;
 import com.hookflow.api.infrastructure.persistence.apiKey.ApiKeyEntity;
@@ -43,8 +42,7 @@ public class ApiKeyService implements ApiKeyGateway {
     @Transactional
     @Override
     public String createKey() {
-
-        byte[] randomBytes = new byte[32]; // 256 bits
+        byte[] randomBytes = new byte[32];
         secureRandom.nextBytes(randomBytes);
 
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
@@ -81,11 +79,10 @@ public class ApiKeyService implements ApiKeyGateway {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<UUID> findAllByClientApplicationId(UUID applicationId) {
-        return apiKeyRepository.findAllByClientApplicationId(applicationId)
-                .stream()
-                .toList();
+    public long countByClientApplicationId(UUID applicationId) {
+        return apiKeyRepository.countByClientApplicationId(applicationId);
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.UUID;
 public class ApiKeyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(nullable = false, updatable = false)
     private UUID id;
     @Column(name = "application_id", nullable = false)
     private UUID clientApplicationId;

@@ -2,6 +2,7 @@ package com.hookflow.api.infrastructure.config;
 
 import com.hookflow.api.infrastructure.security.CsrfMaterializationFilter;
 import com.hookflow.api.infrastructure.security.JwtAuthenticationFilter;
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -21,17 +22,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter, CsrfMaterializationFilter csrfMaterializationFilter) throws Exception{
-        CookieCsrfTokenRepository csrfRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-
-        csrfRepository.setCookieCustomizer(cookie -> cookie
-                .httpOnly(false)
-                .secure(false)
-                .sameSite("Lax")
-                .maxAge(15 * 60)
-                .path("/")
-        );
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception{
         return http
                 .csrf(csrf -> csrf
                     .spa()
@@ -40,6 +31,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/hookflow-api/auth/**").permitAll()
                         .requestMatchers("/hookflow-api/csrf").permitAll()
                         .requestMatchers("/hookflow-api/admin/**").hasRole("ADMIN")

@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         body.put("error", "Senha incorreta");
         body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
         body.put("error", "Usuário ja existe");
         body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         body.put("error", "Token invalido");
         body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ClientApplicationNotFoundException.class)
@@ -74,6 +74,6 @@ public class GlobalExceptionHandler {
         body.put("error", "Limite de chaves api atingido");
         body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 }

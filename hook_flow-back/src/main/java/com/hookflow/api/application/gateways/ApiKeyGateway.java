@@ -10,5 +10,5 @@ public interface ApiKeyGateway {
     String createKey();
     String hashKey(String key);
     List<ApiKey> findAllByClientApplicationIdIn(List<UUID> applicationsIds);
-    List<UUID> findAllByClientApplicationId(UUID applicationId);
+    long countByClientApplicationId(UUID applicationId);
 }

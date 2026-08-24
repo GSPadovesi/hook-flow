@@ -1,4 +1,4 @@
-package com.hookflow.api.infrastructure.gateway;
+package com.hookflow.api.infrastructure.services;
 
 import com.auth0.jwt.JWT;
 import com.hookflow.api.application.gateways.AuthGateway;

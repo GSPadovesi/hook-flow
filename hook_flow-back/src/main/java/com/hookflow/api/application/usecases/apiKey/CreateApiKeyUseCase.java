@@ -16,13 +16,11 @@ public class CreateApiKeyUseCase {
     }
 
     public String execute(CreateApiKeyCommand command){
+        long apiKeyCount = apiKeyGateway.countByClientApplicationId(command.clientApplicationId());
 
-        List<UUID>  keysByApplicationId = apiKeyGateway.findAllByClientApplicationId(command.clientApplicationId());
-
-        if(keysByApplicationId.size() >= 3){
+        if(apiKeyCount >= 3){
             throw new ClientApplicationApiKeyLimitExceededException("Essa aplicação excedeu o limite de API Keys");
         }
-
 
         String key = apiKeyGateway.createKey();
         String hashKey = apiKeyGateway.hashKey(key);

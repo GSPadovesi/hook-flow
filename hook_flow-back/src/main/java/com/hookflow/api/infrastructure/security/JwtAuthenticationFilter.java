@@ -29,13 +29,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Entrei no filtro JWT");
         try {
             System.out.println("Entrei no try");
             String token = getTokenAccessToken(request);
 
             if(token == null){
-                System.out.println("Entrei no if sem token");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -43,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             DecodedJWT tokenValid = validateToken.execute(token);
 
             if (!"access".equals(tokenValid.getClaim("type").asString())) {
-                System.out.println("Entrei no if sem token e access token");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -54,9 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"))
             );
 
-            System.out.println("Passou o if sem access token, segue o user: " + authenticatedUser.getUser().getName());
-
-
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     authenticatedUser,
                     null,
@@ -66,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

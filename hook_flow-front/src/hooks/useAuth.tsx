@@ -18,7 +18,7 @@ export const useAuth = () => {
 
     try {
       await login(email, password);
-      await csrf();
+      // await csrf();
       await auth?.createSession();
       navigate(appRoutes.Dashboard);
     } catch (error) {

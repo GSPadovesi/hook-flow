@@ -1,4 +1,4 @@
-package com.hookflow.api.infrastructure.gateway;
+package com.hookflow.api.infrastructure.services;
 
 import com.hookflow.api.application.gateways.UserGateway;
 import com.hookflow.api.domain.entities.User;

@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface ApiKeyRepository extends JpaRepository<ApiKeyEntity, UUID> {
     List<ApiKeyEntity> findAllByClientApplicationIdIn(List<UUID> clientApplicationIds);
-    List<UUID> findAllByClientApplicationId(UUID applicationId);
+    long countByClientApplicationId(UUID applicationId);
 }

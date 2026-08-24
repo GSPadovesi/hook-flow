@@ -1,6 +1,5 @@
 package com.hookflow.api.infrastructure.config;
 
-import com.hookflow.api.infrastructure.security.CsrfMaterializationFilter;
 import com.hookflow.api.infrastructure.security.JwtAuthenticationFilter;
 import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;

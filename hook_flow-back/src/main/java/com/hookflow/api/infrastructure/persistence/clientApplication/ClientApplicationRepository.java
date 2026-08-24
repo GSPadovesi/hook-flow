@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface ClientApplicationRepository extends JpaRepository<ClientApplicationEntity, UUID> {
     List<ClientApplicationEntity> findAllByOwnerId(UUID id, Pageable page);
+    boolean existsByIdAndOwnerId(UUID applicationId, UUID ownerId);
 }

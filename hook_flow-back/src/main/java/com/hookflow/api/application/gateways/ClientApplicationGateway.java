@@ -11,4 +11,5 @@ public interface ClientApplicationGateway {
     Optional<ClientApplication>findClientApplicationById(UUID id);
     Optional<List<ClientApplication>> findAllClientApplication(Integer page, UUID ownerId);
     boolean existsById(UUID id);
+    boolean existsByIdAndOwnerId(UUID applicationId, UUID ownerId);
 }

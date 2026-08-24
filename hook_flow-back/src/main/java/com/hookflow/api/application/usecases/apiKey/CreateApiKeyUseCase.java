@@ -2,20 +2,27 @@ package com.hookflow.api.application.usecases.apiKey;
 
 import com.hookflow.api.application.command.apiKey.CreateApiKeyCommand;
 import com.hookflow.api.application.exceptions.ClientApplicationApiKeyLimitExceededException;
+import com.hookflow.api.application.exceptions.ClientApplicationNotFoundException;
 import com.hookflow.api.application.gateways.ApiKeyGateway;
+import com.hookflow.api.application.gateways.ClientApplicationGateway;
 import com.hookflow.api.domain.entities.ApiKey;
-
-import java.util.List;
-import java.util.UUID;
 
 public class CreateApiKeyUseCase {
     private final ApiKeyGateway apiKeyGateway;
+    private final ClientApplicationGateway clientApplicationGateway;
 
-    public CreateApiKeyUseCase(ApiKeyGateway apiKeyGateway){
+    public CreateApiKeyUseCase(ApiKeyGateway apiKeyGateway, ClientApplicationGateway clientApplicationGateway){
         this.apiKeyGateway = apiKeyGateway;
+        this.clientApplicationGateway = clientApplicationGateway;
     }
 
     public String execute(CreateApiKeyCommand command){
+        boolean applicationBelongsToUser = clientApplicationGateway.existsByIdAndOwnerId(command.clientApplicationId(), command.ownerId());
+
+        if (!applicationBelongsToUser) {
+            throw new ClientApplicationNotFoundException("Aplicacao nao encontrada");
+        }
+
         long apiKeyCount = apiKeyGateway.countByClientApplicationId(command.clientApplicationId());
 
         if(apiKeyCount >= 3){

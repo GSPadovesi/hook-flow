@@ -57,4 +57,10 @@ public class ClientApplicationService implements ClientApplicationGateway {
     public boolean existsById(UUID id) {
         return clientApplicationRepository.existsById(id);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByIdAndOwnerId(UUID applicationId, UUID ownerId) {
+        return clientApplicationRepository.existsByIdAndOwnerId(applicationId, ownerId);
+    }
 }

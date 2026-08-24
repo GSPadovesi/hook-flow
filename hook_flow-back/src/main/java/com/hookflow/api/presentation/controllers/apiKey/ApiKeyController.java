@@ -2,9 +2,11 @@ package com.hookflow.api.presentation.controllers.apiKey;
 
 import com.hookflow.api.application.command.apiKey.CreateApiKeyCommand;
 import com.hookflow.api.application.usecases.apiKey.CreateApiKeyUseCase;
+import com.hookflow.api.infrastructure.persistence.security.AuthenticatedUser;
 import com.hookflow.api.presentation.dtos.apiKey.CreateApiKeyDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +22,10 @@ public class ApiKeyController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody CreateApiKeyDTO requestDTO){
+    public ResponseEntity<String> create(@RequestBody CreateApiKeyDTO requestDTO, @AuthenticationPrincipal AuthenticatedUser authenticatedUser){
         CreateApiKeyCommand command = new CreateApiKeyCommand(
-                requestDTO.applicationId()
+                requestDTO.applicationId(),
+                authenticatedUser.getUser().getId()
         );
 
         String key = createApiKeyUseCase.execute(command);

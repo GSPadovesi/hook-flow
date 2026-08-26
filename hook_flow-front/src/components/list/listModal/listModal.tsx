@@ -1,9 +1,10 @@
 import { X } from 'lucide-react';
 import { Title } from '../../title';
+import { Button } from '../../button';
 import type { ListModalProps } from '@/types';
 import * as S from './listModal.styles';
 
-export const ListModal = ({ title, children, icon, onClose, actions }: ListModalProps) => {
+export const ListModal = ({ title, subtitle, children, icon, onClose, actions }: ListModalProps) => {
   return <S.ModalContent>
     <S.ModalHeader>
       <S.ModalIcon>
@@ -11,6 +12,7 @@ export const ListModal = ({ title, children, icon, onClose, actions }: ListModal
       </S.ModalIcon>
       <S.ModalTitle>
         <Title type="h3">{title}</Title>
+        {subtitle && <S.ModalSubtitle>{subtitle}</S.ModalSubtitle>}
       </S.ModalTitle>
       <S.ModalCloseButton type="button" onClick={onClose} aria-label="Fechar modal">
         <X size={18} aria-hidden="true" />
@@ -20,7 +22,7 @@ export const ListModal = ({ title, children, icon, onClose, actions }: ListModal
       {children}
     </S.ModalBody>
     <S.ModalActions>
-      <S.ModalButton type="button" onClick={onClose}>Cancelar</S.ModalButton>
+      <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
       {actions}
     </S.ModalActions>
   </S.ModalContent>

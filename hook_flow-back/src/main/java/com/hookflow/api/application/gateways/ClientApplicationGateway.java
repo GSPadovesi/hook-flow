@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface ClientApplicationGateway {
     ClientApplication save(ClientApplication client);
     Optional<ClientApplication>findClientApplicationById(UUID id);
-    Optional<List<ClientApplication>> findAllClientApplication(Integer page, UUID ownerId);
+    List<ClientApplication> findAllClientApplication(Integer page, UUID ownerId);
     boolean existsById(UUID id);
     boolean existsByIdAndOwnerId(UUID applicationId, UUID ownerId);
 }

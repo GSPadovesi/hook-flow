@@ -25,7 +25,7 @@ export const Header = styled.header`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 20px;
 `
 
 export const HeaderContent = styled.div`

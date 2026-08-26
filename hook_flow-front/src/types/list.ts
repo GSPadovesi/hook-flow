@@ -1,8 +1,11 @@
-import type { ClientApplicationProps } from './clientApplication'
+import type { ReactNode } from 'react'
+
+export type ListRow = {
+  id: string
+  cells: ReactNode[]
+}
 
 export type ListProps = {
   headers?: string[]
-  applications?: ClientApplicationProps[]
-  onEdit?: (application: ClientApplicationProps) => void
-  onDelete?: (application: ClientApplicationProps) => void
+  rows?: ListRow[]
 }

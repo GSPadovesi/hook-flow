@@ -40,28 +40,9 @@ export const TableHeader = styled.th`
   }
 `
 
-export const TableContent = styled.td<{ $hasActions?: boolean }>`
+export const TableContent = styled.td`
   padding: 8px 8px 8px 16px;
-  ${({ $hasActions }) => $hasActions && `
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  `}
 `
-
-export const CardKey = styled.div`
-  width: 180px;
-  border: 2px solid grey;
-  border-radius: 6px;
-  padding: 4px 4px 4px 16px;
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`
-
 
 
 

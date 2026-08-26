@@ -1,13 +1,13 @@
-import type { ActionButtonProps, ClientApplicationProps } from '@/types'
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import type { ActionButtonItem, ActionButtonProps } from '@/types'
+import { MoreVertical } from 'lucide-react'
 import { useState } from 'react'
 import * as S from './actionButton.styles'
 
-export const ActionButton = ({ application, onEdit, onDelete }: ActionButtonProps) => {
+export const ActionButton = <TItem,>({ item, ariaLabel, actions }: ActionButtonProps<TItem>) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleActionClick = (action?: (application: ClientApplicationProps) => void) => {
-    action?.(application)
+  const handleActionClick = (action: ActionButtonItem<TItem>) => {
+    action.onClick?.(item)
     setIsOpen(false)
   }
 
@@ -15,7 +15,7 @@ export const ActionButton = ({ application, onEdit, onDelete }: ActionButtonProp
     <S.Actions>
       <S.ActionsTrigger
         type="button"
-        aria-label={`Abrir acoes de ${application.name}`}
+        aria-label={ariaLabel}
         aria-expanded={isOpen}
         onClick={() => setIsOpen((currentValue) => !currentValue)}
       >
@@ -23,21 +23,17 @@ export const ActionButton = ({ application, onEdit, onDelete }: ActionButtonProp
       </S.ActionsTrigger>
       {isOpen && (
         <S.ActionsMenu>
-          <S.ActionsMenuItem
-            type="button"
-            onClick={() => handleActionClick(onEdit)}
-          >
-            <Pencil size={16} aria-hidden="true" />
-            Editar
-          </S.ActionsMenuItem>
-          <S.ActionsMenuItem
-            type="button"
-            $danger
-            onClick={() => handleActionClick(onDelete)}
-          >
-            <Trash2 size={16} aria-hidden="true" />
-            Apagar
-          </S.ActionsMenuItem>
+          {actions.map((action) => (
+            <S.ActionsMenuItem
+              key={action.label}
+              type="button"
+              $danger={action.danger}
+              onClick={() => handleActionClick(action)}
+            >
+              {action.icon}
+              {action.label}
+            </S.ActionsMenuItem>
+          ))}
         </S.ActionsMenu>
       )}
     </S.Actions>

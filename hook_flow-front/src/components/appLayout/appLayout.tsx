@@ -1,6 +1,17 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import { Sidebar, Title, UserDropdown } from '../'
+import { Button, Sidebar, Title, UserDropdown } from '../'
 import * as S from './appLayout.styles'
+import type { Dispatch, SetStateAction } from 'react'
+import { useState } from 'react'
+
+export type HeaderAction = {
+  label: string
+  onClick: () => void
+}
+
+export type AppLayoutOutletContext = {
+  setHeaderAction: Dispatch<SetStateAction<HeaderAction | null>>
+}
 
 const Headings: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -21,6 +32,7 @@ const SubHeadings: Record<string, string> = {
 }
 
 export function AppLayout() {
+  const [headerAction, setHeaderAction] = useState<HeaderAction | null>(null);
   const location = useLocation();
 
   return (
@@ -36,11 +48,12 @@ export function AppLayout() {
               </S.HeaderContent>
               <S.HeaderContent>
                 <Title type='h3'>{SubHeadings[location.pathname]}</Title>
+                {headerAction && <Button style={{ maxHeight: '50px' }} onClick={headerAction.onClick}>{headerAction.label}</Button>}
               </S.HeaderContent>
             </S.Header>
           )}
           <S.PageContent>
-            <Outlet />
+            <Outlet context={{ setHeaderAction }} />
           </S.PageContent>
         </S.Content>
       </S.Main>

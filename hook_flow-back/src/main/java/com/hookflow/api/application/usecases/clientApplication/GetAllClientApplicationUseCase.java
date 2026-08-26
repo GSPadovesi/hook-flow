@@ -24,8 +24,9 @@ public class GetAllClientApplicationUseCase {
     }
 
     public List<ResponseClientApplicationCommand> execute(SearchClientApplicationCommand command){
-        List<ClientApplication> applications = clientApplicationGateway.findAllClientApplication(command.page(), command.ownerId())
-                .orElseThrow(() -> new ClientApplicationNotFoundException("Nenhuma applicacao encontrada"));
+        List<ClientApplication> applications = clientApplicationGateway.findAllClientApplication(command.page(), command.ownerId());
+
+        if(applications.isEmpty()) new ClientApplicationNotFoundException("Nenhuma applicacao encontrada");
 
         List<UUID> applicationsIds = applications
                 .stream()

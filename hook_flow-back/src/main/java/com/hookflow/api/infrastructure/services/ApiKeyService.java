@@ -13,10 +13,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.HexFormat;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ApiKeyService implements ApiKeyGateway {
@@ -83,6 +80,12 @@ public class ApiKeyService implements ApiKeyGateway {
     @Override
     public long countByClientApplicationId(UUID applicationId) {
         return apiKeyRepository.countByClientApplicationId(applicationId);
+    }
+
+    @Override
+    public Optional<ApiKey> findByHashKey(String hash) {
+        return apiKeyRepository.findByHashKey(hash)
+                .map(apiKeyMapper::toDomain);
     }
 
 }

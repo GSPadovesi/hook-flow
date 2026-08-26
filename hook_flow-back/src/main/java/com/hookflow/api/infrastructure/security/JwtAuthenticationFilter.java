@@ -29,8 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("Entrei no filtro do api key");
         try {
-            System.out.println("Entrei no try");
             String token = getTokenAccessToken(request);
 
             if(token == null){

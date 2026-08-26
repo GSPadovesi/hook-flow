@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ModalContent = styled.div`
   display: grid;
-  gap: 14px;
+  gap: 20px;
   position: relative;
 `
 
@@ -23,9 +23,15 @@ export const ModalIcon = styled.div`
 `
 
 export const ModalTitle = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: grid;
+  gap: 4px;
+  padding-right: 44px;
+`
+
+export const ModalSubtitle = styled.p`
+  margin: 0;
+  color: #56566a;
+  line-height: 1.5;
 `
 
 export const ModalCloseButton = styled.button`
@@ -39,16 +45,11 @@ export const ModalCloseButton = styled.button`
 
 export const ModalBody = styled.div`
   display: grid;
-  gap: 12px;
+  gap: 16px;
 `
 
 export const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-`
-
-export const ModalButton = styled.button`
-  padding: 8px 12px;
-  cursor: pointer;
+  gap: 12px;
 `

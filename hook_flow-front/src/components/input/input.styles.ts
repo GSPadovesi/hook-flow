@@ -14,3 +14,10 @@ export const Input = styled.input`
   padding: 14px 16px;
   outline: none;
 `
+
+export const HelperText = styled.span`
+  color: #6f6f82;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+`

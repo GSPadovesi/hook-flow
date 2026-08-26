@@ -38,7 +38,7 @@ public class ClientApplicationService implements ClientApplicationGateway {
     }
 
     @Override
-    public Optional<List<ClientApplication>> findAllClientApplication(Integer page, UUID ownerId) {
+    public List<ClientApplication> findAllClientApplication(Integer page, UUID ownerId) {
         Pageable pageable = PageRequest.of(page, 10);
         List<ClientApplication> applications =
                 clientApplicationRepository
@@ -47,9 +47,8 @@ public class ClientApplicationService implements ClientApplicationGateway {
                         .map(clientApplicationMapper::toDomain)
                         .toList();
 
-        if(applications.isEmpty()) return Optional.empty();
 
-        return Optional.of(applications);
+        return applications;
     }
 
     @Transactional(readOnly = true)

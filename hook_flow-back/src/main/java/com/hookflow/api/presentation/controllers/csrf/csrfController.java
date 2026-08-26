@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//Irrelevante no cenario atual, o SPA do security seta o token csrf
 @RestController
 @RequestMapping("/hookflow-api")
 public class csrfController {

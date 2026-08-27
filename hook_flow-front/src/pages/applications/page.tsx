@@ -10,13 +10,13 @@ import { useOutletContext } from "react-router-dom";
 import * as S from './page.styles'
 
 export const Page = () => {
-  const applications = useContext(ClientApplicationContext);
-  const { setHeaderAction } = useOutletContext<AppLayoutOutletContext>();
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const [isKeysModalOpen, setIsKeysModalOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState<ClientApplicationProps | null>(null);
   const [selectedKeys, setSelectedKeys] = useState<KeysProps[]>([]);
   const [applicationId, setApplicationId] = useState('');
+  const { setHeaderAction } = useOutletContext<AppLayoutOutletContext>();
+  const applications = useContext(ClientApplicationContext);
 
   const openCreateModal = useCallback(() => {
     setSelectedApplication(null);

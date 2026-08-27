@@ -2,16 +2,40 @@ import type { ModalEditApplicationProps } from '@/types';
 import { ListModal } from '../listModal/listModal';
 import { AppWindow, Pencil } from 'lucide-react';
 import { Button, Input, Modal } from '@/components';
-import { useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import * as S from './modalEditApplication.styles'
+import { ClientApplicationContext } from '@/context';
+import { createClientApplication } from '@/service';
 
 export const ModalEditApplication = ({ isOpen, application, onClose }: ModalEditApplicationProps) => {
   const [name, setName] = useState(application?.name ?? '');
   const [description, setDescription] = useState(application?.description ?? '');
+  const [loading, setLoading] = useState(false);
+  const applications = useContext(ClientApplicationContext);
   const isEditing = Boolean(application);
   const hasRequiredValues = Boolean(name.trim()) && Boolean(description.trim());
   const hasChanged = name.trim() !== (application?.name ?? '').trim() || description.trim() !== (application?.description ?? '').trim();
-  const isSubmitDisabled = isEditing ? !hasRequiredValues || !hasChanged : !hasRequiredValues;
+  const isSubmitDisabled = isEditing ? !hasRequiredValues || !hasChanged : !hasRequiredValues || loading;
+
+  const handleCreataClientApplication = useCallback(async () => {
+    if (!name.trim() || !description.trim() || loading) return;
+
+    try {
+      setLoading(true);
+      const data = await createClientApplication(name, description);
+      applications?.setApplications((oldApplications) => {
+        return [...oldApplications, data]
+      });
+
+      setTimeout(() => onClose, 300)
+    } catch (error) {
+      console.error("Erro: ", error);
+    } finally {
+      setLoading(false);
+    }
+
+
+  }, [name, description])
 
   useEffect(() => {
     setName(application?.name ?? '');
@@ -23,7 +47,7 @@ export const ModalEditApplication = ({ isOpen, application, onClose }: ModalEdit
       title={isEditing ? 'Editar aplicacao' : 'Nova aplicacao'}
       subtitle={isEditing ? 'Atualize as informacoes da aplicacao.' : 'Cadastre uma aplicacao para comecar a enviar eventos.'}
       onClose={onClose}
-      actions={<Button type="button" disabled={isSubmitDisabled}>{isEditing ? 'Salvar' : 'Criar aplicacao'}</Button>}
+      actions={<Button type="button" disabled={isSubmitDisabled} onClick={handleCreataClientApplication}>{loading ? "criando..." : isEditing ? 'Salvar' : 'Criar aplicacao'}</Button>}
       icon={isEditing ? <Pencil color="#9d2dfd" /> : <AppWindow color="#9d2dfd" />}
     >
       <S.EditForm>

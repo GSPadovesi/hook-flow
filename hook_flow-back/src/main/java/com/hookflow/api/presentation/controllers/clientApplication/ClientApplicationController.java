@@ -37,9 +37,7 @@ public class ClientApplicationController {
                 requestDTO.description()
         );
 
-        ClientApplication response = createClientApplicationUseCase.execute(command);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(ClientApplicationResponseDTO.fromDomain(response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ClientApplicationResponseDTO.fromDomain(createClientApplicationUseCase.execute(command)));
     }
 
     @GetMapping

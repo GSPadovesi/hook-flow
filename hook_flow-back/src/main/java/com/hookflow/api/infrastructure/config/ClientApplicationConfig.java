@@ -4,12 +4,18 @@ import com.hookflow.api.application.gateways.ApiKeyGateway;
 import com.hookflow.api.application.gateways.ClientApplicationGateway;
 import com.hookflow.api.application.usecases.clientApplication.CreateClientApplicationUseCase;
 import com.hookflow.api.application.usecases.clientApplication.GetAllClientApplicationUseCase;
+import com.hookflow.api.application.usecases.clientApplication.RemoveClientApplicationUseCase;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClientApplicationConfig {
+    @Bean
+    RemoveClientApplicationUseCase removeClientApplicationUseCase(ClientApplicationGateway clientApplicationGateway){
+        return new RemoveClientApplicationUseCase(clientApplicationGateway);
+    }
+
     @Bean
     GetAllClientApplicationUseCase getAllClientApplicationUseCase(ClientApplicationGateway clientApplicationGateway, ApiKeyGateway apiKeyGateway){
         return new GetAllClientApplicationUseCase(clientApplicationGateway, apiKeyGateway);

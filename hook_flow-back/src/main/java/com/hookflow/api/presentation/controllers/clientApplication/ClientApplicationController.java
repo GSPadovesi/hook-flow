@@ -4,6 +4,7 @@ import com.hookflow.api.application.command.clientApplication.RegisterClientAppl
 import com.hookflow.api.application.command.clientApplication.SearchClientApplicationCommand;
 import com.hookflow.api.application.usecases.clientApplication.CreateClientApplicationUseCase;
 import com.hookflow.api.application.usecases.clientApplication.GetAllClientApplicationUseCase;
+import com.hookflow.api.application.usecases.clientApplication.RemoveClientApplicationUseCase;
 import com.hookflow.api.domain.entities.ClientApplication;
 import com.hookflow.api.infrastructure.persistence.security.AuthenticatedUser;
 import com.hookflow.api.presentation.dtos.clientApplication.ClientApplicationResponseDTO;
@@ -17,16 +18,19 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/hookflow-api/client")
 public class ClientApplicationController {
     private final CreateClientApplicationUseCase createClientApplicationUseCase;
     private final GetAllClientApplicationUseCase getAllClientApplicationUseCase;
+    private final RemoveClientApplicationUseCase removeClientApplicationUseCase;
 
-    public ClientApplicationController(CreateClientApplicationUseCase createClientApplicationUseCase, GetAllClientApplicationUseCase getAllClientApplicationUseCase){
+    public ClientApplicationController(CreateClientApplicationUseCase createClientApplicationUseCase, GetAllClientApplicationUseCase getAllClientApplicationUseCase, RemoveClientApplicationUseCase removeClientApplicationUseCase){
         this.createClientApplicationUseCase = createClientApplicationUseCase;
         this.getAllClientApplicationUseCase = getAllClientApplicationUseCase;
+        this.removeClientApplicationUseCase = removeClientApplicationUseCase;
     }
 
     @PostMapping
@@ -53,5 +57,11 @@ public class ClientApplicationController {
                 .toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(listAll);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable  UUID id){
+        removeClientApplicationUseCase.execute(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { HeaderHamburguer } from './headerHamburguer/HeaderHamburguer'
 import { Title } from '../title'
 import { Button } from '../button'
@@ -6,6 +6,7 @@ import { House, LayoutGrid, Webhook, TicketPercent, TicketCheck, Lock, LogOut } 
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks'
 import * as S from './sidebar.styles'
+import { UserContext } from '@/context'
 
 const dados = [
   { label: "Dashboard", icon: <House />, href: "/dashboard" },
@@ -19,6 +20,8 @@ const dados = [
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const { onLogout } = useAuth();
+  const auth = useContext(UserContext);
+  const isAdmin = auth?.user?.role === "ADMIN";
   const navigate = useNavigate();
   const location = useLocation();
   const closeMenu = () => { setIsOpen(false) }
@@ -30,12 +33,15 @@ export function Sidebar() {
 
   const handleNavigate = useCallback((href: string) => {
     navigate(href);
+    setIsOpen(false);
   }, [navigate])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
+
+  console.log(isAdmin)
 
   return (
     <>
@@ -49,6 +55,8 @@ export function Sidebar() {
         <S.List>
           {dados.map((item, index) => {
             const isActive = location.pathname === item.href
+
+            if (item.label === "Administrador" && !isAdmin) return;
 
             return (
               <S.Item key={`${item.href}-${index}`}>

@@ -12,3 +12,8 @@ export async function createClientApplication(name: string, description: string,
   const { data } = await api.post<ClientApplicationProps>("/client", { name, description }, { withCredentials: true, signal })
   return data
 }
+
+export async function deleteClientApplication(id: string, signal?: AbortSignal) {
+  await api.delete(`/client/${id}`, { withCredentials: true, signal });
+  return;
+}

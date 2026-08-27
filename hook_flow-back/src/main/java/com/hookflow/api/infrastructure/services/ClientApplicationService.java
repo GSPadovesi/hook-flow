@@ -42,7 +42,7 @@ public class ClientApplicationService implements ClientApplicationGateway {
         Pageable pageable = PageRequest.of(page, 10);
         List<ClientApplication> applications =
                 clientApplicationRepository
-                        .findAllByOwnerId(ownerId, pageable)
+                        .findAllByOwnerIdAndActiveTrue(ownerId, pageable)
                         .stream()
                         .map(clientApplicationMapper::toDomain)
                         .toList();

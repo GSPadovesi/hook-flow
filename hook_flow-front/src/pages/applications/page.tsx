@@ -7,7 +7,9 @@ import type { ClientApplicationProps, KeysProps, ListRow } from "@/types";
 import { ChevronRight, KeyRound, Pencil, Trash2 } from "lucide-react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { deleteClientApplication } from "@/service";
 import * as S from './page.styles'
+import { Applications } from ".";
 
 export const Page = () => {
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
@@ -38,6 +40,16 @@ export const Page = () => {
     setApplicationId(id);
     setIsKeysModalOpen(true);
   }, []);
+
+  const handleDeleteClientApplication = useCallback(async (id: string) => {
+    try {
+      //Refatoração - colocar um toast de promise pra confirma delete da aplicação.
+      await deleteClientApplication(id);
+      applications?.setApplications(applications.applications.filter(application => application.id !== id))
+    } catch (err) {
+      console.log("Erro: ", err);
+    }
+  }, [])
 
   useEffect(() => {
     setHeaderAction({
@@ -73,6 +85,7 @@ export const Page = () => {
               {
                 label: 'Apagar',
                 icon: <Trash2 size={16} aria-hidden="true" />,
+                onClick: () => handleDeleteClientApplication(application.id),
                 danger: true
               }
             ]}

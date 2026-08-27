@@ -1,0 +1,1 @@
+export { Page as Admin } from './page'

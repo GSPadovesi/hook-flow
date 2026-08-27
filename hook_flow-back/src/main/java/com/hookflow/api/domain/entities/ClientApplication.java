@@ -32,6 +32,16 @@ public class ClientApplication {
         return new ClientApplication(id, ownerId, name, description, active);
     }
 
+    public void remove(){
+        setName(this.name + "-deleted");
+        setActive(false);
+    }
+
+    public void updateDetails(String name, String description){
+        if(name.trim() != null) setName(name);
+        if(description.trim() != null) setDescription(description);
+    }
+
     public UUID getId(){
         return id;
     }

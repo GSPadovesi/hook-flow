@@ -64,7 +64,7 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }:
           </S.GeneratedKeyContent>
           :
           <>
-            <S.KeyList>
+            {<S.KeyList>
               <S.KeyHeader>
                 <Title type="h3">Suas chaves de API</Title>
                 <div style={{ display: 'flex', gap: '12px', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
@@ -79,35 +79,37 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }:
                 </div>
               </S.KeyHeader>
               <Typography>Você pode criar até 3 chaves da API. Cada chave será exibida apenas 1 vez.</Typography>
-              <S.KeyContent>
-                <S.KeyTableHeader>
-                  <Typography>Id da chave</Typography>
-                  <Typography>Status</Typography>
-                </S.KeyTableHeader>
-                {keys.map((key) => (
-                  <S.KeyRow key={key.id}>
-                    <S.KeyInfo>
-                      <S.KeyIcon aria-hidden="true">
-                        <Hash size={16} />
-                      </S.KeyIcon>
-                      <S.KeyText>
-                        <Typography fontWeight={700}>{key.id}</Typography>
-                      </S.KeyText>
-                    </S.KeyInfo>
-                    <S.KeyStatus $active={getKeyActive(key)}>
-                      {getKeyActive(key) ? 'Ativa' : 'Inativa'}
-                    </S.KeyStatus>
-                    <S.KeyActionsButton
-                      type="button"
-                      aria-label={`Remover chave ${key.id}`}
-                      onClick={() => onRemoveKey?.(key.id)}
-                    >
-                      <Trash2 size={18} />
-                    </S.KeyActionsButton>
-                  </S.KeyRow>
-                ))}
-              </S.KeyContent>
-            </S.KeyList>
+              {keys.length ?
+                <S.KeyContent>
+                  <S.KeyTableHeader>
+                    <Typography>Id da chave</Typography>
+                    <Typography>Status</Typography>
+                  </S.KeyTableHeader>
+                  {keys.map((key) => (
+                    <S.KeyRow key={key.id}>
+                      <S.KeyInfo>
+                        <S.KeyIcon aria-hidden="true">
+                          <Hash size={16} />
+                        </S.KeyIcon>
+                        <S.KeyText>
+                          <Typography fontWeight={700}>{key.id}</Typography>
+                        </S.KeyText>
+                      </S.KeyInfo>
+                      <S.KeyStatus $active={getKeyActive(key)}>
+                        {getKeyActive(key) ? 'Ativa' : 'Inativa'}
+                      </S.KeyStatus>
+                      <S.KeyActionsButton
+                        type="button"
+                        aria-label={`Remover chave ${key.id}`}
+                        onClick={() => onRemoveKey?.(key.id)}
+                      >
+                        <Trash2 size={18} />
+                      </S.KeyActionsButton>
+                    </S.KeyRow>
+                  ))}
+                </S.KeyContent> :
+                <Title type="h3">Nenhuma chave vinculada a essa aplicação foi encontrada</Title>}
+            </S.KeyList>}
             <S.SecurityAlert>
               <S.SecurityIcon>
                 <Shield size={22} />

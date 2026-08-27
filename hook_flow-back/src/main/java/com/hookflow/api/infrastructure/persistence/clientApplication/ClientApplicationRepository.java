@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClientApplicationRepository extends JpaRepository<ClientApplicationEntity, UUID> {
-    List<ClientApplicationEntity> findAllByOwnerId(UUID id, Pageable page);
+    List<ClientApplicationEntity> findAllByOwnerIdAndActiveTrue(UUID id, Pageable page);
     boolean existsByIdAndOwnerId(UUID applicationId, UUID ownerId);
 }

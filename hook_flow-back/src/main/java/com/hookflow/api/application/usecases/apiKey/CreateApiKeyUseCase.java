@@ -39,11 +39,9 @@ public class CreateApiKeyUseCase {
         String hashKey = apiKeyGateway.hashKey(key);
         ApiKey newApiKey = ApiKey.create(command.clientApplicationId(), hashKey);
 
-        apiKeyGateway.save(newApiKey);
-
         return new ResponseApiKeyCommand(
                 key,
-                newApiKey
+                apiKeyGateway.save(newApiKey)
         );
     }
 }

@@ -3,3 +3,4 @@ export { Login } from './login';
 export { Applications } from './applications';
 export { Placeholder } from './placeholder';
 export { Admin } from './admin';
+export { WebHooks } from './webhooks';

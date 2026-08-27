@@ -41,8 +41,6 @@ export function Sidebar() {
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  console.log(isAdmin)
-
   return (
     <>
       {isOpen && <S.Backdrop type="button" aria-label="Fechar menu" onClick={closeMenu} />}

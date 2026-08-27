@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { AppLayout } from '../components'
-import { Applications, Dashboard, Login, Admin, Placeholder } from '../pages'
+import { Dashboard, Applications, WebHooks, Login, Admin, Placeholder } from '../pages'
 import { GuestRoute, ProtectedRoute } from './routeGuards'
 import { appRoutes } from './routePaths'
 export { appRoutes } from './routePaths'
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
           },
           {
             path: appRoutes.Webhook,
-            element: <Placeholder />
+            element: <WebHooks />
           },
           {
             path: appRoutes.Event,

@@ -37,7 +37,7 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose }: ModalKeysPro
           if (application.id === applicationId) {
             return {
               ...application,
-              keys: [...application.keys, data.apiKey]
+              keys: [{ id: data.apiKey.id, active: data.apiKey.active }, ...application.keys]
             };
           }
 
@@ -75,6 +75,8 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose }: ModalKeysPro
           return application;
         });
       });
+
+      onClose();
     } catch (err) {
       console.error("Error: ", err)
     }
@@ -149,6 +151,9 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose }: ModalKeysPro
                 </Typography>
                 <Typography color="#4b3b5f" fontSize="14px">
                   Guarde-a em um local seguro.
+                </Typography>
+                <Typography color="#4b3b5f" fontSize="14px">
+                  Para apagar totalmente uma API key ou ativa-la novamente, entre em contato com o administrador.
                 </Typography>
               </S.SecurityText>
             </S.SecurityAlert>

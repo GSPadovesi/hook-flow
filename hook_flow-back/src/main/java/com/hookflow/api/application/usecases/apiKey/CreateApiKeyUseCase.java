@@ -1,11 +1,17 @@
 package com.hookflow.api.application.usecases.apiKey;
 
 import com.hookflow.api.application.command.apiKey.CreateApiKeyCommand;
+import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
 import com.hookflow.api.application.exceptions.ClientApplicationApiKeyLimitExceededException;
 import com.hookflow.api.application.exceptions.ClientApplicationNotFoundException;
 import com.hookflow.api.application.gateways.ApiKeyGateway;
 import com.hookflow.api.application.gateways.ClientApplicationGateway;
 import com.hookflow.api.domain.entities.ApiKey;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CreateApiKeyUseCase {
     private final ApiKeyGateway apiKeyGateway;
@@ -16,7 +22,7 @@ public class CreateApiKeyUseCase {
         this.clientApplicationGateway = clientApplicationGateway;
     }
 
-    public String execute(CreateApiKeyCommand command){
+    public ResponseApiKeyCommand execute(CreateApiKeyCommand command){
         boolean applicationBelongsToUser = clientApplicationGateway.existsByIdAndOwnerId(command.clientApplicationId(), command.ownerId());
 
         if (!applicationBelongsToUser) {
@@ -35,6 +41,9 @@ public class CreateApiKeyUseCase {
 
         apiKeyGateway.save(newApiKey);
 
-        return key;
+        return new ResponseApiKeyCommand(
+                key,
+                newApiKey
+        );
     }
 }

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 
 export type KeysProps = {
   id: string,
@@ -11,21 +11,22 @@ export type ClientApplicationProps = {
   description: string;
   status: boolean;
   ownerId: string;
-  keys: KeysProps[]
+  keys: KeysProps[];
 }
 
 export type ClientApplicationApiResponse = {
-  id: string
-  name: string
-  description: string
-  active: boolean
-  ownerId: string
-  keys: KeysProps[]
+  id: string;
+  name: string;
+  description: string;
+  active: boolean;
+  ownerId: string;
+  keys: KeysProps[];
 }
 
 export type ClientApplicationContextProps = {
   applications: ClientApplicationProps[];
-  header: string[]
+  setApplications: Dispatch<SetStateAction<ClientApplicationProps[]>>;
+  header: string[];
 }
 
 export type ClientApplicationProviderProps = {

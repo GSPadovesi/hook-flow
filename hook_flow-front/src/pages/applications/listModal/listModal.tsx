@@ -1,8 +1,7 @@
 import { X } from 'lucide-react';
-import { Title } from '../../title';
-import { Button } from '../../button';
 import type { ListModalProps } from '@/types';
 import * as S from './listModal.styles';
+import { Title } from '@/components';
 
 export const ListModal = ({ title, subtitle, children, icon, onClose, actions }: ListModalProps) => {
   return <S.ModalContent>
@@ -22,7 +21,6 @@ export const ListModal = ({ title, subtitle, children, icon, onClose, actions }:
       {children}
     </S.ModalBody>
     <S.ModalActions>
-      <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
       {actions}
     </S.ModalActions>
   </S.ModalContent>

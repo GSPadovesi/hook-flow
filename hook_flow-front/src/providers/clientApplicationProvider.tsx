@@ -32,7 +32,7 @@ export const ClientApplicationProvider = ({ children }: ClientApplicationProvide
     getData()
   }, [])
 
-  return <ClientApplicationContext.Provider value={{ applications, header }}>
+  return <ClientApplicationContext.Provider value={{ applications, setApplications, header }}>
     {children}
   </ClientApplicationContext.Provider>
 }

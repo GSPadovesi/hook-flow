@@ -1,13 +1,14 @@
-import { Modal } from '../../modal';
 import { ListModal } from '../listModal/listModal';
 import { Hash, KeyRound, Shield, Trash2 } from 'lucide-react';
 import { Title } from '@/components/title';
 import { Typography } from '@/components/typography';
 import { Button } from '@/components/button';
-import type { KeysProps, ModalKey, ModalKeysProps } from '@/types';
+import type { ClientApplicationProps, KeysProps, ModalKey, ModalKeysProps } from '@/types';
 import * as S from './modalKeys.styles'
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { createApiKey } from '@/service/apiKey';
+import { Modal } from '@/components';
+import { ClientApplicationContext } from '@/context';
 
 const getKeyActive = (key: KeysProps) => {
   const modalKey = key as ModalKey
@@ -15,11 +16,10 @@ const getKeyActive = (key: KeysProps) => {
   return modalKey.active ?? modalKey.status ?? false
 }
 
-
-
 export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }: ModalKeysProps) => {
   const [generatedApiKey, setGeneratedApiKey] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const applicationsProvider = useContext(ClientApplicationContext);
 
   const handleClose = useCallback(() => {
     setGeneratedApiKey(null)
@@ -31,8 +31,20 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }:
 
     try {
       setIsGenerating(true)
-      const apiKey = await createApiKey(applicationId)
-      setGeneratedApiKey(String(apiKey))
+      const data = await createApiKey(applicationId)
+      applicationsProvider?.setApplications((oldApplications) => {
+        return oldApplications.map((application) => {
+          if (application.id === applicationId) {
+            return {
+              ...application,
+              keys: [...application.keys, data.apiKey]
+            };
+          }
+
+          return application;
+        });
+      });
+      setGeneratedApiKey(String(data.key))
     } catch {
       setGeneratedApiKey(null)
     } finally {
@@ -48,6 +60,7 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }:
             <Title type="h3">Chave de API gerada</Title>
             <Typography color="#4b3b5f">Esta chave será exibida apenas uma vez. Guarde-a em um local seguro.</Typography>
             <S.GeneratedKeyValue>{generatedApiKey}</S.GeneratedKeyValue>
+            <Button onClick={handleClose}>Fechar</Button>
           </S.GeneratedKeyContent>
           :
           <>

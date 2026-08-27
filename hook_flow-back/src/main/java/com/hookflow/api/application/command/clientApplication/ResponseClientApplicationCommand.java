@@ -1,6 +1,7 @@
 package com.hookflow.api.application.command.clientApplication;
 
 import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
+import com.hookflow.api.application.command.apiKey.ResponseApiKeySummaryCommand;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,6 @@ public record ResponseClientApplicationCommand(
         String name,
         String description,
         boolean active,
-        List<ResponseApiKeyCommand> apiKeys
+        List<ResponseApiKeySummaryCommand> apiKeys
 ) {
 }

@@ -2,7 +2,7 @@ package com.hookflow.api.presentation.dtos.clientApplication;
 
 import com.hookflow.api.application.command.clientApplication.ResponseClientApplicationCommand;
 import com.hookflow.api.domain.entities.ClientApplication;
-import com.hookflow.api.presentation.dtos.apiKey.ApiKeyResponseDTO;
+import com.hookflow.api.presentation.dtos.apiKey.ResponseApiKeySummaryCommand;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +13,7 @@ public record ClientApplicationResponseDTO(
         String name,
         String description,
         boolean active,
-        List<ApiKeyResponseDTO> keys
+        List<ResponseApiKeySummaryCommand> keys
 ) {
     public static ClientApplicationResponseDTO fromDomain(ClientApplication clientApplication) {
         return new ClientApplicationResponseDTO(
@@ -35,7 +35,10 @@ public record ClientApplicationResponseDTO(
                 command.active(),
                 command.apiKeys()
                         .stream()
-                        .map(ApiKeyResponseDTO::fromCommand)
+                        .map(key -> new ResponseApiKeySummaryCommand(
+                                key.id(),
+                                key.active()
+                        ))
                         .toList()
         );
     }

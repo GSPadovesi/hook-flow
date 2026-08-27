@@ -1,9 +1,11 @@
 package com.hookflow.api.application.command.apiKey;
 
+import com.hookflow.api.domain.entities.ApiKey;
+
 import java.util.UUID;
 
 public record ResponseApiKeyCommand(
-        UUID id,
-        boolean active
+        String key,
+        ApiKey apiKey
 ) {
 }

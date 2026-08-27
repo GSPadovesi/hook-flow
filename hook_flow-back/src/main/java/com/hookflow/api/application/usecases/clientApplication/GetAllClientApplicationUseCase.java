@@ -1,6 +1,7 @@
 package com.hookflow.api.application.usecases.clientApplication;
 
 import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
+import com.hookflow.api.application.command.apiKey.ResponseApiKeySummaryCommand;
 import com.hookflow.api.application.command.clientApplication.ResponseClientApplicationCommand;
 import com.hookflow.api.application.command.clientApplication.SearchClientApplicationCommand;
 import com.hookflow.api.application.exceptions.ClientApplicationNotFoundException;
@@ -48,7 +49,7 @@ public class GetAllClientApplicationUseCase {
                     application.isActive(),
                     keysByApplicationId.getOrDefault(application.getId(), List.of())
                             .stream()
-                            .map(key -> new ResponseApiKeyCommand(
+                            .map(key -> new ResponseApiKeySummaryCommand(
                                     key.getId(),
                                     key.isActive()
                             ))

@@ -1,6 +1,6 @@
 import { ActionButton, List } from "@/components";
-import { ModalEditApplication } from "@/components/list/modalEditApplication";
-import { ModalKeys } from "@/components/list/modalKeys";
+import { ModalEditApplication } from "./modalEditApplication";
+import { ModalKeys } from "./modalKeys";
 import { ClientApplicationContext } from "@/context";
 import type { AppLayoutOutletContext } from "@/components/appLayout/appLayout";
 import type { ClientApplicationProps, KeysProps, ListRow } from "@/types";

@@ -1,8 +1,7 @@
-import { Modal } from '../../modal';
 import type { ModalEditApplicationProps } from '@/types';
 import { ListModal } from '../listModal/listModal';
 import { AppWindow, Pencil } from 'lucide-react';
-import { Button, Input } from '@/components';
+import { Button, Input, Modal } from '@/components';
 import { useEffect, useState } from 'react';
 import * as S from './modalEditApplication.styles'
 

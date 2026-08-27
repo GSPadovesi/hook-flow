@@ -14,4 +14,5 @@ public interface ApiKeyGateway {
     List<ApiKey> findAllByClientApplicationIdIn(List<UUID> applicationsIds);
     long countByClientApplicationId(UUID applicationId);
     Optional<ApiKey> findByHashKey(String hash);
+    Optional<ApiKey> findById(UUID id);
 }

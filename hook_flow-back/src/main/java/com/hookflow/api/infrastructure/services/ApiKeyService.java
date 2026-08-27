@@ -88,4 +88,10 @@ public class ApiKeyService implements ApiKeyGateway {
                 .map(apiKeyMapper::toDomain);
     }
 
+    @Override
+    public Optional<ApiKey> findById(UUID id) {
+        return apiKeyRepository.findById(id)
+                .map(apiKeyMapper::toDomain);
+    }
+
 }

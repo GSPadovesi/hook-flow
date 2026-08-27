@@ -3,11 +3,11 @@ import { Hash, KeyRound, Shield, Trash2 } from 'lucide-react';
 import { Title } from '@/components/title';
 import { Typography } from '@/components/typography';
 import { Button } from '@/components/button';
-import type { ClientApplicationProps, KeysProps, ModalKey, ModalKeysProps } from '@/types';
+import type { KeysProps, ModalKey, ModalKeysProps } from '@/types';
 import * as S from './modalKeys.styles'
 import { useCallback, useContext, useState } from 'react';
-import { createApiKey } from '@/service/apiKey';
-import { Modal } from '@/components';
+import { createApiKey, removeApiKey } from '@/service/apiKey';
+import { appToast, Modal } from '@/components';
 import { ClientApplicationContext } from '@/context';
 
 const getKeyActive = (key: KeysProps) => {
@@ -16,7 +16,7 @@ const getKeyActive = (key: KeysProps) => {
   return modalKey.active ?? modalKey.status ?? false
 }
 
-export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }: ModalKeysProps) => {
+export const ModalKeys = ({ isOpen, keys, applicationId, onClose }: ModalKeysProps) => {
   const [generatedApiKey, setGeneratedApiKey] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const applicationsProvider = useContext(ClientApplicationContext);
@@ -51,6 +51,34 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }:
       setIsGenerating(false)
     }
   }, [applicationId, isGenerating, keys.length]);
+
+  const handleRemoveApiKey = useCallback(async (id: string) => {
+    try {
+      const result = await appToast.promise(() => removeApiKey(id), {
+        confirm: 'Deseja apagar esta chave?',
+        pending: 'Apagando chave...',
+        success: 'Chave apagada com sucesso.',
+        error: 'Erro ao apagar chave.',
+      });
+
+      if (result === false) return;
+
+      applicationsProvider?.setApplications((oldApplications) => {
+        return oldApplications.map((application) => {
+          if (application.id === applicationId) {
+            return {
+              ...application,
+              keys: application.keys.filter(key => key.id !== id)
+            };
+          }
+
+          return application;
+        });
+      });
+    } catch (err) {
+      console.error("Error: ", err)
+    }
+  }, [applicationId, applicationsProvider])
 
   return <Modal isOpen={isOpen} onClose={handleClose} ariaLabel='Modal de chaves da aplicacao' >
     <ListModal title="API Keys" onClose={handleClose} icon={<KeyRound color="#9d2dfd" />}>
@@ -101,7 +129,7 @@ export const ModalKeys = ({ isOpen, keys, applicationId, onClose, onRemoveKey }:
                       <S.KeyActionsButton
                         type="button"
                         aria-label={`Remover chave ${key.id}`}
-                        onClick={() => onRemoveKey?.(key.id)}
+                        onClick={() => handleRemoveApiKey(key.id)}
                       >
                         <Trash2 size={18} />
                       </S.KeyActionsButton>

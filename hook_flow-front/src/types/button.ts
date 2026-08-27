@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, PropsWithChildren } from 'react'
 
-export type ButtonVariant = 'primary' | 'secondary'
+export type ButtonVariant = 'primary' | 'secondary' | 'danger'
 
 type BaseButtonProps = {
   variant?: ButtonVariant
@@ -20,5 +20,5 @@ export type AnchorButtonProps = PropsWithChildren<AnchorHTMLAttributes<HTMLAncho
 export type ButtonProps = NativeButtonProps | AnchorButtonProps
 
 export type ButtonStyleProps = {
-  $variant: 'primary' | 'secondary'
+  $variant: ButtonVariant
 }

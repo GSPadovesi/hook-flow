@@ -23,6 +23,11 @@ public class ApiKey {
         return new ApiKey(id, clientApplicationId, hashKey, active);
     }
 
+    public void remove(){
+        setHashKey(this.hashKey + "-deleted");
+        setActive(false);
+    }
+
     public UUID getId() {
         return id;
     }

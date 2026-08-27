@@ -5,7 +5,6 @@ export type ModalKeysProps = {
   keys: KeysProps[]
   applicationId: string
   onClose: () => void
-  onRemoveKey?: (keyId: string) => void
 }
 
 export type ModalKey = KeysProps & {

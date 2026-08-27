@@ -1,4 +1,4 @@
-import { ActionButton, List } from "@/components";
+import { ActionButton, appToast, List } from "@/components";
 import { ModalEditApplication } from "./modalEditApplication";
 import { ModalKeys } from "./modalKeys";
 import { ClientApplicationContext } from "@/context";
@@ -9,7 +9,6 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { deleteClientApplication } from "@/service";
 import * as S from './page.styles'
-import { Applications } from ".";
 
 export const Page = () => {
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
@@ -43,13 +42,22 @@ export const Page = () => {
 
   const handleDeleteClientApplication = useCallback(async (id: string) => {
     try {
-      //Refatoração - colocar um toast de promise pra confirma delete da aplicação.
-      await deleteClientApplication(id);
-      applications?.setApplications(applications.applications.filter(application => application.id !== id))
+      const result = await appToast.promise(() => deleteClientApplication(id), {
+        confirm: 'Deseja apagar esta aplicacao?',
+        pending: 'Apagando aplicacao...',
+        success: 'Aplicacao apagada com sucesso.',
+        error: 'Erro ao apagar aplicacao.',
+      });
+
+      if (result === false) return;
+
+      applications?.setApplications((oldApplications) => {
+        return oldApplications.filter(application => application.id !== id)
+      })
     } catch (err) {
       console.log("Erro: ", err);
     }
-  }, [])
+  }, [applications])
 
   useEffect(() => {
     setHeaderAction({

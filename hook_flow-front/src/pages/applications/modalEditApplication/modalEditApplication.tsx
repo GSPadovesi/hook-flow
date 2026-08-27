@@ -27,7 +27,7 @@ export const ModalEditApplication = ({ isOpen, application, onClose }: ModalEdit
         return [...oldApplications, data]
       });
 
-      setTimeout(() => onClose, 300)
+      onClose()
     } catch (error) {
       console.error("Erro: ", error);
     } finally {

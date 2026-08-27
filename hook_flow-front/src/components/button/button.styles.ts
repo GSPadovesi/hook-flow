@@ -20,6 +20,15 @@ const variants = {
       background: #1d1f3a;
     }
   `,
+  danger: css`
+    color: #fff;
+    background: #dc2626;
+
+    &:not(:disabled):hover {
+      color: #fff;
+      background: #b91c1c;
+    }
+  `,
 }
 
 const buttonStyles = css<ButtonStyleProps>`

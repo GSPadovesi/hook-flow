@@ -31,7 +31,7 @@ public class WebHookController {
     }
 
     @GetMapping
-    public ResponseEntity<PageCommand<ResponseWebHookDTO>> getAll(@RequestParam UUID applicationId, @PageableDefault(page = 0, size = 10) Pageable pageable, @AuthenticationPrincipal AuthenticatedUser authenticatedUser){
+    public ResponseEntity<PageCommand<ResponseWebHookDTO>> getAll(@RequestParam(required = false) UUID applicationId, @PageableDefault(page = 0, size = 10) Pageable pageable, @AuthenticationPrincipal AuthenticatedUser authenticatedUser){
         SearchWebHookCommand command = new SearchWebHookCommand(
                 authenticatedUser.getUser().getId(),
                 applicationId,

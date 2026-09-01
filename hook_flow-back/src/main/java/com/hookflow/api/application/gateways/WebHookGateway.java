@@ -9,5 +9,6 @@ import java.util.UUID;
 public interface WebHookGateway {
     WebHook save(WebHook webHook);
     PageCommand<WebHook> findAllWebHooksByClientApplicationId(UUID applicationId, Integer page, Integer size);
+    PageCommand<WebHook> findAllByClientApplicationIdIn(List<UUID> applicationsIds, Integer page, Integer size);
     List<WebHook> findAllByClientApplicationIdIn(List<UUID> applicationsIds);
 }

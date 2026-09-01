@@ -48,6 +48,21 @@ public class WebHookService implements WebHookGateway {
         );
     }
 
+    @Override
+    public PageCommand<WebHook> findAllByClientApplicationIdIn(List<UUID> applicationsIds, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<WebHook> webHookPage = webHookRepository.findAllByClientApplicationIdIn(applicationsIds, pageable)
+                .map(webHookMapper::toDomain);
+
+        return new PageCommand<>(
+                webHookPage.getContent(),
+                webHookPage.getNumber(),
+                webHookPage.getSize(),
+                webHookPage.getTotalPages(),
+                webHookPage.getTotalElements()
+        );
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<WebHook> findAllByClientApplicationIdIn(List<UUID> applicationsIds) {

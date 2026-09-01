@@ -25,12 +25,6 @@ export const WebHookProvider = ({ children }: WebHookProviderProps) => {
 
   useEffect(() => {
     const getData = async () => {
-      if (!applicationId) {
-        setWebHooks([]);
-        setTotalPages(0);
-        return;
-      }
-
       try {
         const data = await getAllWebHook(page, size, applicationId);
         setWebHooks(data.content);

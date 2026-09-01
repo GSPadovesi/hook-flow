@@ -8,6 +8,7 @@ export type BaseHeaderAction = {
 export type ButtonHeaderAction = BaseHeaderAction & {
   type?: 'default'
   onClick: () => void
+  disabled?: boolean
 }
 
 export type SelectHeaderAction = BaseHeaderAction & {

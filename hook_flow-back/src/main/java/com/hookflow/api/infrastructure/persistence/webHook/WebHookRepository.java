@@ -9,5 +9,6 @@ import java.util.UUID;
 
 public interface WebHookRepository extends JpaRepository<WebHookEntity, UUID> {
     List<WebHookEntity> findAllByClientApplicationIdIn(List<UUID> applicationsIds);
+    Page<WebHookEntity> findAllByClientApplicationIdIn(List<UUID> applicationIds, Pageable pageable);
     Page<WebHookEntity> findAllWebHooksByClientApplicationId(UUID clientApplicationId, Pageable pageable);
 }

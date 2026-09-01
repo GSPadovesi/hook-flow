@@ -22,13 +22,16 @@ export const Page = () => {
     return applications?.applications.map((application) => ({
       label: application.name,
       value: application.id
-    })) ?? []
+    })) ?? [];
+
   }, [applications?.applications])
 
   const handleCreateWebHook = useCallback(() => {
+    if (!webhooks?.applicationId) return;
+
     setSelectedWebHook(null);
     setIsWebHookModalOpen(true);
-  }, [])
+  }, [webhooks?.applicationId])
 
   const handleEditWebHook = useCallback((webHook: WebHookProps) => {
     setSelectedWebHook(webHook);
@@ -56,23 +59,18 @@ export const Page = () => {
   }, [webhooks])
 
   useEffect(() => {
-    if (webhooks?.applicationId || applicationOptions.length === 0) return;
-
-    webhooks?.setApplicationId(String(applicationOptions[0].value));
-  }, [applicationOptions, webhooks])
-
-  useEffect(() => {
     setHeaderAction(
       [
         {
           type: "default",
           label: "Novo WebHook",
+          disabled: !webhooks?.applicationId,
           onClick: handleCreateWebHook
         },
         {
           type: "select",
           label: "Applicações",
-          placeholder: "Selecione uma aplicacao",
+          placeholder: "Todas as aplicações",
           value: webhooks?.applicationId ?? "",
           onChange: handleApplicationChange,
           options: applicationOptions

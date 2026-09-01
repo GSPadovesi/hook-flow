@@ -10,9 +10,7 @@ import com.hookflow.api.domain.entities.ClientApplication;
 import com.hookflow.api.domain.entities.WebHook;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class GetAllWebHookUseCase {
     private final ClientApplicationGateway clientApplicationGateway;
@@ -24,6 +22,29 @@ public class GetAllWebHookUseCase {
     }
 
     public PageCommand<ResponseWebHookCommand> getAll(SearchWebHookCommand command){
+        if(command.applicationId() == null){
+            List<UUID> applicationsIds = clientApplicationGateway.findAllClientApplication(command.ownerId())
+                    .stream().map(ClientApplication::getId).toList();
+
+            PageCommand<WebHook> webHooksPage = webHookGateway.findAllByClientApplicationIdIn(applicationsIds, command.page(), command.size());
+            return new PageCommand<>(
+                    webHooksPage.content()
+                            .stream()
+                            .map(webHook -> new ResponseWebHookCommand(
+                                    webHook.getId(),
+                                    webHook.getClientApplicationId(),
+                                    webHook.getUrl(),
+                                    webHook.isActive(),
+                                    webHook.getEventCategories()
+                            ))
+                            .toList(),
+                    webHooksPage.page(),
+                    webHooksPage.size(),
+                    webHooksPage.totalPages(),
+                    webHooksPage.totalElements()
+            );
+        }
+
         boolean applicationBelongsToUser = clientApplicationGateway.existsByIdAndOwnerId(command.applicationId(), command.ownerId());
 
         if(!applicationBelongsToUser) throw new ClientApplicationNotFoundException("Aplicação não encontrada");

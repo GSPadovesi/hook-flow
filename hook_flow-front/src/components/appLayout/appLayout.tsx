@@ -56,7 +56,7 @@ export function AppLayout() {
                         )
                       }
 
-                      return <Button key={action.label} style={{ maxHeight: '50px' }} onClick={action.onClick}>{action.label}</Button>
+                      return <Button key={action.label} style={{ maxHeight: '50px' }} disabled={action.disabled} onClick={action.onClick}>{action.label}</Button>
                     })}
                   </S.HeaderActions>
                 )}

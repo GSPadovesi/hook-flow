@@ -2,12 +2,12 @@ import { ActionButton, appToast, List } from "@/components";
 import { ModalEditApplication } from "./modalEditApplication";
 import { ModalKeys } from "./modalKeys";
 import { ClientApplicationContext } from "@/context";
-import type { AppLayoutOutletContext } from "@/components/appLayout/appLayout";
-import type { ClientApplicationProps, KeysProps, ListRow } from "@/types";
 import { ChevronRight, KeyRound, Pencil, Trash2 } from "lucide-react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { deleteClientApplication } from "@/service";
+import type { ClientApplicationProps, KeysProps, ListRow } from "@/types";
+import type { AppLayoutOutletContext } from "@/types/appLayout";
 import * as S from './page.styles'
 
 export const Page = () => {
@@ -80,7 +80,7 @@ export const Page = () => {
           <ChevronRight />
         </S.KeysButton>,
         <S.StatusActions>
-          {application.status ? 'Ativo' : 'Desativado'}
+          {application.active ? 'Ativo' : 'Desativado'}
           <ActionButton
             item={application}
             ariaLabel={`Abrir acoes de ${application.name}`}

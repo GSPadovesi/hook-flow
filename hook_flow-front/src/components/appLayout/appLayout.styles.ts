@@ -36,6 +36,17 @@ export const HeaderContent = styled.div`
   gap: 20px;
 `
 
+export const HeaderActions = styled.div`
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 12px;
+
+  @media(max-width: 1024px){
+    flex-direction: column;
+  }
+`
+
 export const PageContent = styled.div`
   flex: 1;
   min-height: 0;

@@ -8,4 +8,5 @@ export type ListRow = {
 export type ListProps = {
   headers?: string[]
   rows?: ListRow[]
+  emptyMessage?: ReactNode
 }

@@ -33,8 +33,6 @@ export const ModalEditApplication = ({ isOpen, application, onClose }: ModalEdit
     } finally {
       setLoading(false);
     }
-
-
   }, [name, description])
 
   useEffect(() => {

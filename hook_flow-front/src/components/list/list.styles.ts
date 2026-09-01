@@ -44,6 +44,11 @@ export const TableContent = styled.td`
   padding: 8px 8px 8px 16px;
 `
 
+export const EmptyContent = styled.td`
+  padding: 32px 20px;
+  text-align: center;
+  background-color: #f8f8f8;
+`
 
 
 

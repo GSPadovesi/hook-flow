@@ -1,17 +1,8 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import { Button, Sidebar, Title, UserDropdown } from '../'
-import * as S from './appLayout.styles'
-import type { Dispatch, SetStateAction } from 'react'
+import { Button, Select, Sidebar, Title, UserDropdown } from '../'
 import { useState } from 'react'
-
-export type HeaderAction = {
-  label: string
-  onClick: () => void
-}
-
-export type AppLayoutOutletContext = {
-  setHeaderAction: Dispatch<SetStateAction<HeaderAction | null>>
-}
+import type { HeaderActions } from '@/types/appLayout'
+import * as S from './appLayout.styles'
 
 const Headings: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -32,8 +23,9 @@ const SubHeadings: Record<string, string> = {
 }
 
 export function AppLayout() {
-  const [headerAction, setHeaderAction] = useState<HeaderAction | null>(null);
+  const [headerAction, setHeaderAction] = useState<HeaderActions>(null);
   const location = useLocation();
+  const headerActions = Array.isArray(headerAction) ? headerAction : headerAction ? [headerAction] : [];
 
   return (
     <>
@@ -48,7 +40,26 @@ export function AppLayout() {
               </S.HeaderContent>
               <S.HeaderContent>
                 <Title type='h3'>{SubHeadings[location.pathname]}</Title>
-                {headerAction && <Button style={{ maxHeight: '50px' }} onClick={headerAction.onClick}>{headerAction.label}</Button>}
+                {headerActions.length > 0 && (
+                  <S.HeaderActions>
+                    {headerActions.map((action) => {
+                      if (action.type === 'select') {
+                        return (
+                          <Select
+                            key={action.label}
+                            label=""
+                            placeholder={action.placeholder}
+                            value={action.value}
+                            onChange={action.onChange}
+                            options={action.options}
+                          />
+                        )
+                      }
+
+                      return <Button key={action.label} style={{ maxHeight: '50px' }} onClick={action.onClick}>{action.label}</Button>
+                    })}
+                  </S.HeaderActions>
+                )}
               </S.HeaderContent>
             </S.Header>
           )}

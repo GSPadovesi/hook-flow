@@ -1,11 +1,12 @@
 package com.hookflow.api.presentation.controllers.clientApplication;
 
 import com.hookflow.api.application.command.clientApplication.RegisterClientApplicationCommand;
+import com.hookflow.api.application.command.clientApplication.ResponseClientApplicationCommand;
 import com.hookflow.api.application.command.clientApplication.SearchClientApplicationCommand;
+import com.hookflow.api.application.command.page.PageCommand;
 import com.hookflow.api.application.usecases.clientApplication.CreateClientApplicationUseCase;
 import com.hookflow.api.application.usecases.clientApplication.GetAllClientApplicationUseCase;
 import com.hookflow.api.application.usecases.clientApplication.RemoveClientApplicationUseCase;
-import com.hookflow.api.domain.entities.ClientApplication;
 import com.hookflow.api.infrastructure.persistence.security.AuthenticatedUser;
 import com.hookflow.api.presentation.dtos.clientApplication.ClientApplicationResponseDTO;
 import com.hookflow.api.presentation.dtos.clientApplication.CreateClientApplicationDTO;
@@ -17,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -45,18 +45,25 @@ public class ClientApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClientApplicationResponseDTO>> getAll(@PageableDefault(page = 0, size = 10) Pageable pageable, @AuthenticationPrincipal AuthenticatedUser authenticatedUser){
+    public ResponseEntity<PageCommand<ClientApplicationResponseDTO>> getAll(@PageableDefault(page = 0, size = 10) Pageable pageable, @AuthenticationPrincipal AuthenticatedUser authenticatedUser){
         SearchClientApplicationCommand command = new SearchClientApplicationCommand(
                 authenticatedUser.getUser().getId(),
-                pageable.getPageNumber()
+                pageable.getPageNumber(),
+                pageable.getPageSize()
         );
 
-        List<ClientApplicationResponseDTO> listAll = getAllClientApplicationUseCase.execute(command)
-                .stream()
-                .map(ClientApplicationResponseDTO::fromDomain)
-                .toList();
+        PageCommand<ResponseClientApplicationCommand> result = getAllClientApplicationUseCase.execute(command);
 
-        return ResponseEntity.status(HttpStatus.OK).body(listAll);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageCommand<>(
+                result.content()
+                        .stream()
+                        .map(ClientApplicationResponseDTO::fromDomain)
+                        .toList(),
+                result.page(),
+                result.size(),
+                result.totalPages(),
+                result.totalElements()
+        ));
     }
 
     @DeleteMapping("/{id}")

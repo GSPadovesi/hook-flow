@@ -1,10 +1,12 @@
 package com.hookflow.api.infrastructure.services;
 
+import com.hookflow.api.application.command.page.PageCommand;
 import com.hookflow.api.application.gateways.ClientApplicationGateway;
 import com.hookflow.api.domain.entities.ClientApplication;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationEntity;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationMapper;
 import com.hookflow.api.infrastructure.persistence.clientApplication.ClientApplicationRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,12 +39,27 @@ public class ClientApplicationService implements ClientApplicationGateway {
         return clientApplicationRepository.findById(id).map(clientApplicationMapper::toDomain);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<ClientApplication> findAllClientApplication(Integer page, UUID ownerId) {
-        Pageable pageable = PageRequest.of(page, 10);
+    public PageCommand<ClientApplication> findAllClientApplication(Integer page, Integer size, UUID ownerId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ClientApplication> applicationsPage = clientApplicationRepository.findAllByOwnerIdAndActiveTrue(ownerId, pageable)
+                .map(clientApplicationMapper::toDomain);
+
+        return new PageCommand<>(
+                applicationsPage.getContent(),
+                applicationsPage.getNumber(),
+                applicationsPage.getSize(),
+                applicationsPage.getTotalPages(),
+                applicationsPage.getTotalElements()
+        );
+    }
+
+    @Override
+    public List<ClientApplication> findAllClientApplication(UUID ownerId) {
         List<ClientApplication> applications =
                 clientApplicationRepository
-                        .findAllByOwnerIdAndActiveTrue(ownerId, pageable)
+                        .findAllByOwnerIdAndActiveTrue(ownerId)
                         .stream()
                         .map(clientApplicationMapper::toDomain)
                         .toList();

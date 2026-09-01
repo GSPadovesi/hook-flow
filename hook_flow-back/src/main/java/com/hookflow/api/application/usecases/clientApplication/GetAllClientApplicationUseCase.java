@@ -4,6 +4,7 @@ import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
 import com.hookflow.api.application.command.apiKey.ResponseApiKeySummaryCommand;
 import com.hookflow.api.application.command.clientApplication.ResponseClientApplicationCommand;
 import com.hookflow.api.application.command.clientApplication.SearchClientApplicationCommand;
+import com.hookflow.api.application.command.page.PageCommand;
 import com.hookflow.api.application.exceptions.ClientApplicationNotFoundException;
 import com.hookflow.api.application.gateways.ApiKeyGateway;
 import com.hookflow.api.application.gateways.ClientApplicationGateway;
@@ -24,8 +25,9 @@ public class GetAllClientApplicationUseCase {
         this.apiKeyGateway = apiKeyGateway;
     }
 
-    public List<ResponseClientApplicationCommand> execute(SearchClientApplicationCommand command){
-        List<ClientApplication> applications = clientApplicationGateway.findAllClientApplication(command.page(), command.ownerId());
+    public PageCommand<ResponseClientApplicationCommand> execute(SearchClientApplicationCommand command){
+        PageCommand<ClientApplication> applicationsPage = clientApplicationGateway.findAllClientApplication(command.page(), command.size(), command.ownerId());
+        List<ClientApplication> applications = applicationsPage.content();
 
         if(applications.isEmpty()) new ClientApplicationNotFoundException("Nenhuma applicacao encontrada");
 
@@ -39,22 +41,28 @@ public class GetAllClientApplicationUseCase {
         Map<UUID, List<ApiKey>> keysByApplicationId = keys.stream()
                 .collect(Collectors.groupingBy(ApiKey::getClientApplicationId));
 
-
-        return applications.stream()
-                .map(application -> new ResponseClientApplicationCommand(
-                    application.getId(),
-                    application.getOwnerId(),
-                    application.getName(),
-                    application.getDescription(),
-                    application.isActive(),
-                    keysByApplicationId.getOrDefault(application.getId(), List.of())
-                            .stream()
-                            .map(key -> new ResponseApiKeySummaryCommand(
-                                    key.getId(),
-                                    key.isActive()
-                            ))
-                            .toList()
-                ))
-                .toList();
+        return new PageCommand<>(
+                applications
+                        .stream()
+                        .map(application -> new ResponseClientApplicationCommand(
+                                application.getId(),
+                                application.getOwnerId(),
+                                application.getName(),
+                                application.getDescription(),
+                                application.isActive(),
+                                keysByApplicationId.getOrDefault(application.getId(), List.of())
+                                        .stream()
+                                        .map(key -> new ResponseApiKeySummaryCommand(
+                                                key.getId(),
+                                                key.isActive()
+                                        ))
+                                        .toList()
+                                ))
+                        .toList(),
+                applicationsPage.page(),
+                applicationsPage.size(),
+                applicationsPage.totalPages(),
+                applicationsPage.totalElements()
+        );
     }
 }

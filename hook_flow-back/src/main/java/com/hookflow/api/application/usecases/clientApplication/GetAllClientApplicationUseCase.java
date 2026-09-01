@@ -1,6 +1,5 @@
 package com.hookflow.api.application.usecases.clientApplication;
 
-import com.hookflow.api.application.command.apiKey.ResponseApiKeyCommand;
 import com.hookflow.api.application.command.apiKey.ResponseApiKeySummaryCommand;
 import com.hookflow.api.application.command.clientApplication.ResponseClientApplicationCommand;
 import com.hookflow.api.application.command.clientApplication.SearchClientApplicationCommand;
@@ -29,7 +28,7 @@ public class GetAllClientApplicationUseCase {
         PageCommand<ClientApplication> applicationsPage = clientApplicationGateway.findAllClientApplication(command.page(), command.size(), command.ownerId());
         List<ClientApplication> applications = applicationsPage.content();
 
-        if(applications.isEmpty()) new ClientApplicationNotFoundException("Nenhuma applicacao encontrada");
+        if(applications.isEmpty()) new ClientApplicationNotFoundException("Nenhuma aplicação encontrada");
 
         List<UUID> applicationsIds = applications
                 .stream()

@@ -19,10 +19,18 @@ export const Page = () => {
   const [selectedWebHook, setSelectedWebHook] = useState<WebHookProps | null>(null);
 
   const applicationOptions = useMemo(() => {
-    return applications?.applications.map((application) => ({
+    const options = applications?.applications.map((application) => ({
       label: application.name,
       value: application.id
     })) ?? [];
+
+    return [
+      {
+        label: "Todas aplicações",
+        value: ""
+      },
+      ...options
+    ]
 
   }, [applications?.applications])
 
@@ -70,7 +78,6 @@ export const Page = () => {
         {
           type: "select",
           label: "Applicações",
-          placeholder: "Todas as aplicações",
           value: webhooks?.applicationId ?? "",
           onChange: handleApplicationChange,
           options: applicationOptions
